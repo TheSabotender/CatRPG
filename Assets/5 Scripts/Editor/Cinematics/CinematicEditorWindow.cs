@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
+
+// https://oguzkonya.com/creating-node-based-editor-unity/
 
 public class CinematicEditorWindow : EditorWindow
 {

@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Udar.SceneManager;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Cinematic", menuName = "Cinematic")]

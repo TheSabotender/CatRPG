@@ -1,12 +1,7 @@
-using Codice.Client.BaseCommands.CheckIn;
-using PlasticPipe.PlasticProtocol.Messages;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Instrumentation;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class CinematicEditorNode
 {
