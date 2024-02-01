@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 [System.Serializable]
 public class CinematicBranchNode : CinematicBaseNode

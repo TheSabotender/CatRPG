@@ -8,4 +8,9 @@ public class CharacterData : GuidScriptableObject
 
     public Sprite portrait_small;
     public Sprite portrait_medium;
+
+    public static CharacterData Find(string guid)
+    {
+        return GuidDatabase.Find<CharacterData>(guid);
+    }
 }

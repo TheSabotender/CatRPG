@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class CinematicEditorNode
 {
+    private const float LABELWIDTH = 50;
+
     public static void DrawNode(CinematicBaseNode node, Vector2 offset, GUIStyle style)
     {
         GUILayout.BeginArea(GetSize(node, offset), style);
@@ -25,11 +27,10 @@ public class CinematicEditorNode
             return new Rect(node.position + offset, new Vector2(200, 220));
         if (node is CinematicWaitNode)
             return new Rect(node.position + offset, new Vector2(200, 100));
-        if (node is CinematicLoadSceneNode)
-            return new Rect(node.position + offset, new Vector2(200, 120));
         if (node is CinematicBranchNode)
             return new Rect(node.position + offset, new Vector2(200, 140 + ConnectionCount(node) * 50));
-
+        if (node is CinematicMoveCameraNode)
+            return new Rect(node.position + offset, new Vector2(200, 160 + ((node as CinematicMoveCameraNode).moveType == CinematicMoveCameraNode.MoveType.Curve ? 20 : 0)));
         //if (node is CinematicPlaySoundNode)
         if (node is CinematicPlayAnimationNode)
             return new Rect(node.position, new Vector2(200, 120));
@@ -74,16 +75,24 @@ public class CinematicEditorNode
         {
             var dialogueNode = (CinematicDialogueNode)node;
 
-            List<CharacterData> allCharacters = new List<CharacterData>(Resources.LoadAll<CharacterData>("Characters"));
-            if (allCharacters.Count > 0)
+            using (new GUILayout.HorizontalScope())
             {
-                CharacterData selected = allCharacters.Where(c => c.guid == dialogueNode.speakerGuid).First();
-                int speakerIndex = EditorGUILayout.Popup("Speaker", allCharacters.IndexOf(selected), allCharacters.Select(c => c.displayName).ToArray());
-                dialogueNode.speakerGuid = allCharacters[speakerIndex].guid;
-            }
-            else
-            {
-                dialogueNode.speakerGuid = EditorGUILayout.TextField("Speaker", dialogueNode.speakerGuid);
+                EditorGUILayout.LabelField("Speaker", GUILayout.Width(LABELWIDTH));
+                List<CharacterData> allCharacters = GuidDatabase.FindAll<CharacterData>();
+                if (allCharacters.Count > 0)
+                {
+                    int selected = 0;
+                    var selectedList = allCharacters.Where(c => c.guid == dialogueNode.speakerGuid);
+                    if (selectedList.Count() == 1)
+                        selected = allCharacters.IndexOf(selectedList.First());
+
+                    int speakerIndex = EditorGUILayout.Popup(selected, allCharacters.Select(c => c.displayName).ToArray());
+                    dialogueNode.speakerGuid = allCharacters[speakerIndex].guid;
+                }
+                else
+                {
+                    dialogueNode.speakerGuid = EditorGUILayout.TextField(dialogueNode.speakerGuid);
+                }
             }
 
             EditorGUILayout.LabelField("Text");
@@ -93,13 +102,39 @@ public class CinematicEditorNode
         else if (node is CinematicWaitNode)
         {
             var waitNode = (CinematicWaitNode)node;
-            waitNode.waitTime = EditorGUILayout.FloatField("Wait Time", waitNode.waitTime);
+            using (new GUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("Seconds", GUILayout.Width(LABELWIDTH));
+                waitNode.waitTime = EditorGUILayout.FloatField(waitNode.waitTime);
+            }                
         }
 
-        else if (node is CinematicLoadSceneNode)
+        else if (node is CinematicMoveCameraNode)
         {
-            var loadSceneNode = (CinematicLoadSceneNode)node;
-            //loadSceneNode.scene = UnityEditor.EditorGUILayout.ObjectField("Scene", loadSceneNode.scene, typeof(SceneField), false) as SceneField;
+            var moveCameraNode = (CinematicMoveCameraNode)node;
+            using (new GUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("Move Type", GUILayout.Width(LABELWIDTH));
+                moveCameraNode.moveType = (CinematicMoveCameraNode.MoveType)EditorGUILayout.EnumPopup(moveCameraNode.moveType);
+            }
+            if(moveCameraNode.moveType == CinematicMoveCameraNode.MoveType.Curve)
+                moveCameraNode.curve = EditorGUILayout.CurveField(moveCameraNode.curve);
+
+            using (new GUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("Target", GUILayout.Width(LABELWIDTH));
+                moveCameraNode.lookAtType = (CinematicMoveCameraNode.LookAtType)EditorGUILayout.EnumPopup(moveCameraNode.lookAtType);
+            }
+            if (moveCameraNode.lookAtType == CinematicMoveCameraNode.LookAtType.Transform)
+                moveCameraNode.lookAtTransform = EditorGUILayout.ObjectField(moveCameraNode.lookAtTransform, typeof(Transform), true) as Transform;
+            else
+                moveCameraNode.lookAtVector = EditorGUILayout.Vector3Field("", moveCameraNode.lookAtVector);
+
+            using (new GUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("Wait", GUILayout.Width(LABELWIDTH));
+                moveCameraNode.waidForEnd = EditorGUILayout.Toggle(moveCameraNode.waidForEnd);
+            }
         }
 
         else if (node is CinematicBranchNode)

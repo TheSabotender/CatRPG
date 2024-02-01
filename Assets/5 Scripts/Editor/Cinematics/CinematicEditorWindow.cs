@@ -1,3 +1,5 @@
+using Codice.Client.BaseCommands.CheckIn;
+using Codice.CM.SEIDInfo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -241,47 +243,31 @@ public class CinematicEditorWindow : EditorWindow
         //genericMenu.AddItem(new GUIContent("Remove node"), false, () => { OnClickRemoveNode(); });
 
         // not over a node
-        genericMenu.AddItem(new GUIContent("Dialogue"), false, () => { OnClickAddNode(position, typeof(CinematicDialogueNode)); });
-        genericMenu.AddItem(new GUIContent("Wait"), false, () => { OnClickAddNode(position, typeof(CinematicWaitNode)); });
-        genericMenu.AddItem(new GUIContent("Branch"), false, () => { OnClickAddNode(position, typeof(CinematicBranchNode)); });
+        genericMenu.AddItem(new GUIContent("Dialogue"), false, () => { OnClickAddNode<CinematicDialogueNode>(position); });
+        genericMenu.AddItem(new GUIContent("Wait"), false, () => { OnClickAddNode<CinematicWaitNode>(position); });
+        genericMenu.AddItem(new GUIContent("Branch"), false, () => { OnClickAddNode<CinematicBranchNode>(position); });
+        genericMenu.AddItem(new GUIContent("Camera"), false, () => { OnClickAddNode<CinematicMoveCameraNode>(position); });
 
         genericMenu.ShowAsContext();
     }
 
-    private void OnClickAddNode(Vector2 mousePosition, Type type)
+    private void OnClickAddNode<T>(Vector2 mousePosition) where T : CinematicBaseNode, new()
     {
-        bool isFirst = false;
+        T node = new T();
+
+        if(node is CinematicBranchNode)
+            (node as CinematicBranchNode).branches = new List<CinematicBranchNode.Branch>();
+
+        node.name = "new " + typeof(T).Name.Replace("Cinematic", "").Replace("Node", " Node");
+        node.position = mousePosition - offset;
+        node.guid = Guid.NewGuid().ToString();
+
+
         if (cinematic.nodes == null)
         {
             cinematic.nodes = new List<CinematicBaseNode>();
-            isFirst = true;
-        }
-
-        CinematicBaseNode node = null;
-        switch (type.Name)
-        {            
-            case nameof(CinematicBaseNode):
-                node = new CinematicBaseNode();                
-                break;
-            case nameof(CinematicDialogueNode):
-                node = new CinematicDialogueNode();
-                break;
-            case nameof(CinematicBranchNode):
-                node = new CinematicBranchNode();
-                ((CinematicBranchNode)node).branches = new List<CinematicBranchNode.Branch>();
-                break;
-            case nameof(CinematicWaitNode):
-                node = new CinematicWaitNode();
-                break;
-        }
-
-        node.name = "new " + type.Name.Replace("Cinematic", "").Replace("Node", " Node");
-        node.position = mousePosition - offset;
-        node.guid = Guid.NewGuid().ToString();
-        
-        if (isFirst)
             cinematic.startNodeGuid = node.guid;
-
+        }        
         cinematic.nodes.Add(node);
     }
 

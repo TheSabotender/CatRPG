@@ -102,6 +102,9 @@ public class GuidScriptableObjectEditor : Editor
                     script.EditorSetNewGUID();
         }
 
+        GuidDatabase.Add(script);
+        EditorUtility.SetDirty(GuidDatabase.Instance);
+
         base.OnInspectorGUI();
     }
 }
