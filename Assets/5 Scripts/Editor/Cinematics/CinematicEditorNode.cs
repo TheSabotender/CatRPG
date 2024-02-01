@@ -1,3 +1,4 @@
+using PlasticPipe.PlasticProtocol.Messages;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -16,7 +17,6 @@ public class CinematicEditorNode
             DrawContent(node);
         }
         GUILayout.EndArea();
-        //DrawConnectionPoints(node);    
     }
 
     static Rect GetSize(CinematicBaseNode node, Vector2 offset)
@@ -28,13 +28,44 @@ public class CinematicEditorNode
         if (node is CinematicLoadSceneNode)
             return new Rect(node.position + offset, new Vector2(200, 120));
         if (node is CinematicBranchNode)
-            return new Rect(node.position + offset, new Vector2(200, 220));
+            return new Rect(node.position + offset, new Vector2(200, 140 + ConnectionCount(node) * 50));
 
         //if (node is CinematicPlaySoundNode)
         if (node is CinematicPlayAnimationNode)
             return new Rect(node.position, new Vector2(200, 120));
 
         return new Rect(node.position, new Vector2(200, 120));
+    }
+
+    public static Rect Connection(CinematicBaseNode node, Vector2 offset, int index, bool isInput, bool extraSpace)
+    {
+        Rect body = GetSize(node, offset);
+        Rect con = new Rect(body.position, new Vector2(10, 10));
+
+        con.y += 15;
+
+        if (isInput)
+        {
+            con.x -= 3;
+            
+        }
+        else
+        {
+            con.x += body.width - 7;
+
+            if(node is CinematicBranchNode)
+                con.y += 80 + (extraSpace ? 18 : 0) + index * 45;
+        }
+        
+        return con;
+    }
+
+    static int ConnectionCount(CinematicBaseNode node)
+    {
+        if (node is CinematicBranchNode)
+            return ((CinematicBranchNode)node).branches.Count;
+
+        return 1;
     }
 
     static void DrawContent(CinematicBaseNode node)
@@ -74,7 +105,23 @@ public class CinematicEditorNode
         else if (node is CinematicBranchNode)
         {
             var branchNode = (CinematicBranchNode)node;
-            //branchNode.branches = EditorGUILayout.IntField("Branches", branchNode.branches);
+            EditorGUILayout.LabelField("Branches");
+            branchNode.branches.ForEach(branch =>
+            {
+                using (new GUILayout.VerticalScope("box"))
+                {
+                    branch.condition = (CinematicBranchNode.Condition)EditorGUILayout.EnumPopup("Condition", branch.condition);
+                    if (branch.condition == CinematicBranchNode.Condition.True)
+                    {
+                        branch.conditionData = EditorGUILayout.TextField("Variable", branch.conditionData);
+                    }
+                }
+            });
+            if(GUILayout.Button("Add Branch"))
+            {
+                branchNode.branches.Add(new CinematicBranchNode.Branch());
+            }
+            EditorGUILayout.LabelField("Else");
         }
     /*
         else if (node is CinematicPlaySoundNode)
@@ -107,33 +154,119 @@ public class CinematicEditorNode
         }
     }
 
+    public static void DrawConnectionPoints(CinematicBaseNode node, Vector2 offset, GUIStyle inStyle, GUIStyle outStyle)
+    {
+        //Draw input first
+        Rect input = Connection(node, offset, 0, true, false);
+        GUI.Box(input, "", inStyle);
+
+        //Draw outputs
+        for (int i = 0; i <= ConnectionCount(node); i++)
+        {
+            Rect output = Connection(node, offset, i, false, i == ConnectionCount(node));
+            GUI.Box(output, "", outStyle);
+        }
+    }
+
     public static void Drag(CinematicBaseNode node, Vector2 delta)
     {
         node.position += delta;
     }
-    public static bool ProcessEvents(Cinematic cinematic, CinematicBaseNode node, Vector2 offset, Event e)
+
+    public enum NodeInteractionType
     {
+        None,
+        Drag,
+        Select,
+        Context,
+        Disconnect,
+        ConnectStart,
+        ConnectEnd,
+        Ignore
+    }
+    public static (NodeInteractionType, int) ProcessEvents(Cinematic cinematic, CinematicBaseNode node, Vector2 offset, Event e, bool isConnecting)
+    {
+        //check connection points
+        if(Connection(node, offset,0, true, false).Contains(e.mousePosition))
+        {
+            if (e.type == EventType.MouseDown && e.button == 0)
+            {
+                return (NodeInteractionType.ConnectStart, -1);
+            }
+            if (e.type == EventType.MouseUp && e.button == 0)
+            {
+                return (NodeInteractionType.ConnectEnd, -1);
+            }
+            if (e.type == EventType.MouseDown && e.button == 1)
+            {
+                cinematic.nodes.ForEach(n =>
+                {
+                    if (n.nextNode == node.guid)
+                        n.nextNode = string.Empty;
+                });
+                return (NodeInteractionType.Disconnect, -1);
+            }
+        }
+        for(int i = 0; i <= ConnectionCount(node); i++)
+        {
+            if (Connection(node, offset, i, false, i == ConnectionCount(node)).Contains(e.mousePosition))
+            {
+                if (e.type == EventType.MouseDown && e.button == 0)
+                {
+                    if(!string.IsNullOrEmpty(node.nextNode))
+                    {
+                        node.nextNode = string.Empty;
+                    }
+                    return (NodeInteractionType.ConnectStart, i);
+                }
+                if (e.type == EventType.MouseUp && e.button == 0)
+                {
+                    return (NodeInteractionType.ConnectEnd, -1);
+                }
+                if (e.type == EventType.MouseDown && e.button == 1)
+                {
+                    node.nextNode = string.Empty;
+                    return (NodeInteractionType.Disconnect, i);
+                }
+            }
+        }
+
+        //check node body
         if (!GetSize(node, offset).Contains(e.mousePosition))
-            return false;
+            return (NodeInteractionType.None, 0);
 
         switch (e.type)
         {
             case EventType.MouseDrag:
-                if (e.button == 0)
+                if (isConnecting)
+                    return (NodeInteractionType.Ignore, 0);
+                else if (e.button == 0)
                 {
                     node.position += (e.delta);
                     e.Use();
                 }
-                break;
+                return (NodeInteractionType.Drag, 0);
             case EventType.MouseDown:
+                if (e.button == 0)
+                {
+                    return (NodeInteractionType.Select, 0);
+                }
                 if (e.button == 1)
                 {
                     ProcessContextMenu(cinematic, node);
+                    return (NodeInteractionType.Context, 0);
                 }
                 break;
+            case EventType.MouseUp:
+                if (e.button == 0)
+                {
+                    return (NodeInteractionType.ConnectEnd, -1);
+                }
+                break;
+
         }
 
-        return true;
+        return (NodeInteractionType.None, 0);
     }
 
     private static void ProcessContextMenu(Cinematic cinematic, CinematicBaseNode node)

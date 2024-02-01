@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class CinematicEditorWindow : EditorWindow
 {
+    private enum CursorMode { None, Drag, Connect }
     private Cinematic cinematic;
     private string currentNode;
     private List<CinematicEditorNode> editorNodes;
@@ -17,8 +18,8 @@ public class CinematicEditorWindow : EditorWindow
     private GUIStyle inPointStyle;
     private GUIStyle outPointStyle;
 
-    private CinematicConnectionPoint selectedInPoint;
-    private CinematicConnectionPoint selectedOutPoint;
+    private CursorMode cursorMode = CursorMode.None;
+    private int selectedConnectionPoint;
 
     private Vector2 offset;
     private Vector2 drag;
@@ -53,6 +54,16 @@ public class CinematicEditorWindow : EditorWindow
         nodeStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node0.png") as Texture2D;
         nodeStyle.border = new RectOffset(12, 12, 12, 12);
         nodeStyle.padding = new RectOffset(10, 10, 10, 10);
+
+        inPointStyle = new GUIStyle();
+        inPointStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/btn left.png") as Texture2D;
+        inPointStyle.active.background = EditorGUIUtility.Load("builtin skins/darkskin/images/btn left on.png") as Texture2D;
+        inPointStyle.border = new RectOffset(4, 4, 12, 12);
+
+        outPointStyle = new GUIStyle();
+        outPointStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/btn right.png") as Texture2D;
+        outPointStyle.active.background = EditorGUIUtility.Load("builtin skins/darkskin/images/btn right on.png") as Texture2D;
+        outPointStyle.border = new RectOffset(4, 4, 12, 12);
     }
 
     private void OnGUI()
@@ -63,17 +74,20 @@ public class CinematicEditorWindow : EditorWindow
         if (cinematic != null)
         {
             DrawConnections(offset);
-            DrawNodes(offset);
+            DrawNodes(offset);            
+            DrawConnectionLine(Event.current);
             DrawInspector();
 
-            DrawConnectionLine(Event.current);
-
-            if(!ProcessNodeEvents(Event.current))
+            if (!ProcessNodeEvents(Event.current))
             {
                 ProcessEvents(Event.current);
             }            
 
-            if (GUI.changed) Repaint();
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(cinematic);
+                Repaint();
+            }
         }
         else
         {
@@ -111,35 +125,40 @@ public class CinematicEditorWindow : EditorWindow
         if (cinematic == null || cinematic.nodes == null)
             return;
 
+        Vector2 lineOffset = new Vector2(0, 5);
         cinematic.nodes.ForEach(node =>
         {
-            if (node is CinematicDialogueNode)
-            {
-
-            }
             switch (node.GetType().Name)
             {
                 case nameof(CinematicBranchNode):
-                    var branchNode = (CinematicBranchNode)node;
-                    branchNode.branches.ForEach(branch =>
+                    var branchNode = (CinematicBranchNode)node;                    
+                    for(int i = 0; i < branchNode.branches.Count; i++)
                     {
+                        var branch = branchNode.branches[i];
                         if (!string.IsNullOrEmpty(branch.node))
                         {
                             var nextNode = cinematic.nodes.Where(n => n.guid == branch.node).First();
-                            UnityEditor.Handles.DrawLine(node.position, nextNode.position);
+                            DrawLine(CinematicEditorNode.Connection(nextNode, offset, 0, true, false).position + lineOffset, CinematicEditorNode.Connection(node, offset, i, false, false).position + lineOffset);
                         }
-                    });
-                    if (!string.IsNullOrEmpty(branchNode.nextNode))
+                    }
+
+                    if (!string.IsNullOrEmpty(branchNode.elseBranch))
                     {
-                        var nextNode = cinematic.nodes.Where(n => n.guid == branchNode.nextNode).First();
-                        UnityEditor.Handles.DrawLine(node.position, nextNode.position);
+                        var nextNode = cinematic.nodes.Where(n => n.guid == branchNode.elseBranch).First();
+                        DrawLine(CinematicEditorNode.Connection(nextNode, offset, 0, true, false).position + lineOffset, CinematicEditorNode.Connection(node, offset, branchNode.branches.Count, false, true).position + lineOffset);
                     }
                     break;
+
                 default:
                     if (!string.IsNullOrEmpty(node.nextNode))
                     {
-                        var nextNode = cinematic.nodes.Where(n => n.guid == node.nextNode).First();
-                        UnityEditor.Handles.DrawLine(node.position, nextNode.position);
+                        var connections = cinematic.nodes.Where(n => n.guid == node.nextNode);
+                        if(connections != null && connections.Count() == 1)
+                        {
+                            var nextNode = cinematic.nodes.Where(n => n.guid == node.nextNode).First();
+                            DrawLine(CinematicEditorNode.Connection(nextNode, offset, 0, true, false).position + lineOffset, CinematicEditorNode.Connection(node, offset, 0, false, false).position + lineOffset);
+                        } else
+                            node.nextNode = string.Empty;
                     }
                     break;
             }
@@ -148,41 +167,43 @@ public class CinematicEditorWindow : EditorWindow
 
     private void DrawConnectionLine(Event e)
     {
-        if (selectedInPoint != null && selectedOutPoint == null)
+        if (!string.IsNullOrEmpty(currentNode) && cursorMode == CursorMode.Connect)
         {
-            Handles.DrawBezier(
-                selectedInPoint.rect.center,
-                e.mousePosition,
-                selectedInPoint.rect.center + Vector2.left * 50f,
-                e.mousePosition - Vector2.left * 50f,
-                Color.white,
-                null,
-                2f
-            );
+            if(selectedConnectionPoint == -1)
+            {
+                Rect rect = CinematicEditorNode.Connection(cinematic.nodes.Where(n => n.guid == currentNode).First(), offset, 0, true, false);
+                DrawLine(rect.center, e.mousePosition);                
+            }
 
-            GUI.changed = true;
-        }
-
-        if (selectedOutPoint != null && selectedInPoint == null)
-        {
-            Handles.DrawBezier(
-                selectedOutPoint.rect.center,
-                e.mousePosition,
-                selectedOutPoint.rect.center - Vector2.left * 50f,
-                e.mousePosition + Vector2.left * 50f,
-                Color.white,
-                null,
-                2f
-            );
+            else
+            {
+                CinematicBaseNode node = cinematic.nodes.Where(n => n.guid == currentNode).First();
+                CinematicBranchNode branchNode = node as CinematicBranchNode;
+                Rect rect = CinematicEditorNode.Connection(node, offset, selectedConnectionPoint, false, (branchNode != null && selectedConnectionPoint == branchNode.branches.Count));
+                DrawLine(e.mousePosition, rect.center);
+            }
 
             GUI.changed = true;
         }
     }
 
+    void DrawLine(Vector2 from, Vector2 to)
+    {
+        Handles.DrawBezier(
+                    from,
+                    to,
+                    from + Vector2.left * 50f,
+                    to - Vector2.left * 50f,
+                    Color.white,
+                    null,
+                    2f
+                );
+    }
+
     private void DrawInspector()
     {
         // Draw empty box
-        if (currentNode == null)
+        if (string.IsNullOrEmpty(currentNode))
         {
 
         }
@@ -201,13 +222,15 @@ public class CinematicEditorWindow : EditorWindow
             cinematic.nodes.ForEach(node =>
             {
                 CinematicEditorNode.DrawNode(node, offset, node.guid == cinematic.startNodeGuid ? startNodeStyle : nodeStyle);
+                CinematicEditorNode.DrawConnectionPoints(node, offset, inPointStyle, outPointStyle);
             });
         }
     }
 
     private void ClearConnectionSelection()
     {
-
+        cursorMode = CursorMode.None;
+        selectedConnectionPoint = -1;
     }
 
     private void ProcessContextMenu(Vector2 position)
@@ -245,6 +268,7 @@ public class CinematicEditorWindow : EditorWindow
                 break;
             case nameof(CinematicBranchNode):
                 node = new CinematicBranchNode();
+                ((CinematicBranchNode)node).branches = new List<CinematicBranchNode.Branch>();
                 break;
             case nameof(CinematicWaitNode):
                 node = new CinematicWaitNode();
@@ -252,7 +276,7 @@ public class CinematicEditorWindow : EditorWindow
         }
 
         node.name = "new " + type.Name.Replace("Cinematic", "").Replace("Node", " Node");
-        node.position = mousePosition;
+        node.position = mousePosition - offset;
         node.guid = Guid.NewGuid().ToString();
         
         if (isFirst)
@@ -296,10 +320,14 @@ public class CinematicEditorWindow : EditorWindow
                 break;
 
             case EventType.MouseDrag:
-                if (e.button == 0 || e.button == 2)
+                if ((e.button == 0 || e.button == 2) && cursorMode != CursorMode.Connect)
                 {
                     OnDrag(e.delta);
                 }
+                break;
+
+            case EventType.MouseUp:
+                ClearConnectionSelection();
                 break;
         }
     }
@@ -309,10 +337,74 @@ public class CinematicEditorWindow : EditorWindow
         draggingNode = string.Empty;
         foreach (var node in cinematic.nodes)
         {
-            if(CinematicEditorNode.ProcessEvents(cinematic, node, offset, e)) {
-                draggingNode = node.guid;
-                return true;
+            (CinematicEditorNode.NodeInteractionType interaction, int index) = CinematicEditorNode.ProcessEvents(cinematic, node, offset, e, cursorMode == CursorMode.Connect);
+            switch(interaction) {
+                case CinematicEditorNode.NodeInteractionType.Select:                    
+                case CinematicEditorNode.NodeInteractionType.Context:
+                    currentNode = node.guid;
+                    ClearConnectionSelection();
+                    GUI.changed = true;
+                    return true;
+                case CinematicEditorNode.NodeInteractionType.Drag:
+                    cursorMode = CursorMode.Drag;
+                    draggingNode = node.guid;
+                    GUI.changed = true;
+                    return true;
+                case CinematicEditorNode.NodeInteractionType.ConnectStart:
+                    ClearConnectionSelection();
+                    cursorMode = CursorMode.Connect;
+                    currentNode = node.guid;
+                    selectedConnectionPoint = index;
+                    return true;
+                case CinematicEditorNode.NodeInteractionType.ConnectEnd:
+                    TryConnect(node);
+                    ClearConnectionSelection();
+                    GUI.changed = true;
+                    break;
+                case CinematicEditorNode.NodeInteractionType.Disconnect:
+                    ClearConnectionSelection();
+                    GUI.changed = true;
+                    return true;
+                case CinematicEditorNode.NodeInteractionType.Ignore:
+                    GUI.changed = true;
+                    return true;
+
+
+                case CinematicEditorNode.NodeInteractionType.None:
+                default:
+                    break;
             }
+        }
+
+        return false;
+    }
+
+    bool TryConnect(CinematicBaseNode node)
+    {
+        if (cursorMode == CursorMode.Connect && currentNode != node.guid)
+        {
+            if (selectedConnectionPoint >= 0)
+            {
+                CinematicBaseNode firstNode = cinematic.nodes.Where(n => n.guid == currentNode).First();
+                CinematicBranchNode branchNode = firstNode as CinematicBranchNode;
+                if (branchNode != null && selectedConnectionPoint == branchNode.branches.Count)
+                {
+                    branchNode.elseBranch = node.guid;
+                }
+                else if (branchNode != null)
+                {
+                    branchNode.branches[selectedConnectionPoint].node = node.guid;
+                }
+                firstNode.nextNode = node.guid;
+            }
+            else
+            {
+                CinematicBaseNode secondNode = cinematic.nodes.Where(n => n.guid == node.guid).First();
+                secondNode.nextNode = currentNode;
+            }
+
+            ClearConnectionSelection();
+            return true;
         }
 
         return false;

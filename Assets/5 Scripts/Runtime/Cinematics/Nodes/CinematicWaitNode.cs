@@ -6,4 +6,9 @@ using UnityEngine;
 public class CinematicWaitNode : CinematicBaseNode
 {
     public float waitTime;
+
+    override public IEnumerator Run()
+    {
+        yield return new WaitForSeconds(waitTime);
+    }
 }

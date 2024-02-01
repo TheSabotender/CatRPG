@@ -37,7 +37,12 @@ public class CinematicPlayer : MonoBehaviour
         while (currentNode != null)
         {
             yield return currentNode.Run();
-            currentNode = cinematic.nodes.Where(n => n.guid == currentNode.nextNode).First();
+
+            var nodes = cinematic.nodes.Where(n => n.guid == currentNode.nextNode);
+            if(nodes.Count() > 0)
+                currentNode = nodes.First();
+            else
+                currentNode = null;
         }
 
         onComplete?.Invoke();
