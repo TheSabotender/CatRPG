@@ -18,6 +18,7 @@ MonoBehaviour:
   - rid: 854407427581018117
   - rid: 854407427581018120
   - rid: 854407427581018121
+  - rid: 4379055792902111232
   references:
     version: 2
     RefIds:
@@ -35,7 +36,7 @@ MonoBehaviour:
       data:
         name: new Wait Node
         guid: 4e3e642a-e505-4f4c-aca3-6e235c7ea028
-        position: {x: -138, y: 507}
+        position: {x: -142, y: 408}
         nextNode: 912f9af9-6b45-41a5-a217-2678ea12e44c
         waitTime: 3
     - rid: 854407427581018120
@@ -43,8 +44,8 @@ MonoBehaviour:
       data:
         name: new Dialogue Node
         guid: 912f9af9-6b45-41a5-a217-2678ea12e44c
-        position: {x: 103, y: 536}
-        nextNode: eeb0f340-c1ff-4326-b5be-5b7d281f81fe
+        position: {x: 73, y: 504}
+        nextNode: cfe86760-ce1b-4785-86b1-81eb491e92cb
         speakerGuid: 
         text: I'm here to see the king.
     - rid: 854407427581018121
@@ -52,7 +53,15 @@ MonoBehaviour:
       data:
         name: new Dialogue Node
         guid: eeb0f340-c1ff-4326-b5be-5b7d281f81fe
-        position: {x: 392, y: 567}
+        position: {x: 520, y: 570}
         nextNode: 
         speakerGuid: 
         text: On what business?
+    - rid: 4379055792902111232
+      type: {class: CinematicWaitNode, ns: , asm: GameRuntime}
+      data:
+        name: new Wait Node
+        guid: cfe86760-ce1b-4785-86b1-81eb491e92cb
+        position: {x: 297, y: 544}
+        nextNode: eeb0f340-c1ff-4326-b5be-5b7d281f81fe
+        waitTime: 1

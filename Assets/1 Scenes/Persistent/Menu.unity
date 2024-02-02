@@ -761,7 +761,7 @@ MonoBehaviour:
     _sceneOB: {fileID: 102900000, guid: 921a2832f62108947aa2f9a74bbf4938, type: 3}
     _name: IntroCutscene
     _path: Assets/1 Scenes/GameScenes/IntroCutscene.unity
-    _buildIndex: 2
+    _buildIndex: 3
   menuAnimator: {fileID: 511897646}
   showMenuSlow: {fileID: 7400000, guid: fea496d8c0e9d7040ada7909cd4c67a8, type: 2}
   showMenuQuick: {fileID: 7400000, guid: 36c67ed58b7628842bc0a79b5e9437fe, type: 2}
