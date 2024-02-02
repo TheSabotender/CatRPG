@@ -39,6 +39,7 @@ public class Loader : MonoBehaviour
     {
         for (int i = 0; i < persistentScenes.Length; i++)
         {
+            Debug.Log("Loading " + persistentScenes[i].Name);
             yield return SceneManager.LoadSceneAsync(persistentScenes[i].BuildIndex, LoadSceneMode.Additive);
         }
         Debug.Log("Persistent scenes loaded");
@@ -73,6 +74,7 @@ public class Loader : MonoBehaviour
                 var gameScene = go.GetComponent<GameScene>();
                 if (gameScene != null)
                 {
+                    Debug.Log("Unloading " + SceneManager.GetSceneAt(currentSceneIndex).name);
                     gameScene.OnUnload();
                     break;
                 }
@@ -98,7 +100,7 @@ public class Loader : MonoBehaviour
 
         //TODO hide loading screen
 
-        Debug.Log("Scene loading complete");
+        Debug.Log("Scene loading complete " + SceneManager.GetSceneAt(index).name);
         foreach (GameObject go in SceneManager.GetSceneAt(currentSceneIndex).GetRootGameObjects())
         {
             var gameScene = go.GetComponent<GameScene>();

@@ -183,8 +183,12 @@ MonoBehaviour:
   persistentScenes:
   - _sceneOB: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
     _name: Menu
-    _path: Assets/1 Scenes/Menu.unity
+    _path: Assets/1 Scenes/Persistent/Menu.unity
     _buildIndex: 1
+  - _sceneOB: {fileID: 102900000, guid: da736cc6c7ffdbf4b960d2f48c897b3f, type: 3}
+    _name: Effects
+    _path: 
+    _buildIndex: -1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
