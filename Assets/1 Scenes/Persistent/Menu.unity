@@ -293,10 +293,10 @@ RectTransform:
   - {fileID: 1492702858}
   m_Father: {fileID: 1031905692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 368.81802, y: -50}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &107285756
 MonoBehaviour:
@@ -762,6 +762,7 @@ MonoBehaviour:
     _name: IntroCutscene
     _path: Assets/1 Scenes/GameScenes/IntroCutscene.unity
     _buildIndex: 3
+  continueButton: {fileID: 0}
   menuAnimator: {fileID: 511897646}
   showMenuSlow: {fileID: 7400000, guid: fea496d8c0e9d7040ada7909cd4c67a8, type: 2}
   showMenuQuick: {fileID: 7400000, guid: 36c67ed58b7628842bc0a79b5e9437fe, type: 2}
@@ -920,10 +921,10 @@ RectTransform:
   - {fileID: 76576255}
   m_Father: {fileID: 1031905692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 156.27267, y: -50}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &601061368
 MonoBehaviour:
@@ -1443,10 +1444,10 @@ RectTransform:
   - {fileID: 788905543}
   m_Father: {fileID: 1031905692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 481.36337, y: -50}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &995329790
 MonoBehaviour:
@@ -2241,10 +2242,10 @@ RectTransform:
   - {fileID: 1135873937}
   m_Father: {fileID: 1031905692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 593.9087, y: -50}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2043998960
 MonoBehaviour:
