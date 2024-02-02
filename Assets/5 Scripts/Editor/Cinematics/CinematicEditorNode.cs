@@ -1,3 +1,4 @@
+using Codice.Client.BaseCommands.CheckIn;
 using PlasticPipe.PlasticProtocol.Messages;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,26 +17,14 @@ public class CinematicEditorNode
             node.name = EditorGUILayout.TextField(node.name, EditorStyles.boldLabel);
             GUILayout.Label(node.guid, EditorStyles.miniLabel);
             GUILayout.Space(5);
-            DrawContent(node);
+            node.EditorDraw(LABELWIDTH);
         }
         GUILayout.EndArea();
     }
 
     static Rect GetSize(CinematicBaseNode node, Vector2 offset)
     {
-        if(node is CinematicDialogueNode)
-            return new Rect(node.position + offset, new Vector2(200, 220));
-        if (node is CinematicWaitNode)
-            return new Rect(node.position + offset, new Vector2(200, 100));
-        if (node is CinematicBranchNode)
-            return new Rect(node.position + offset, new Vector2(200, 140 + ConnectionCount(node) * 50));
-        if (node is CinematicMoveCameraNode)
-            return new Rect(node.position + offset, new Vector2(200, 160 + ((node as CinematicMoveCameraNode).moveType == CinematicMoveCameraNode.MoveType.Curve ? 20 : 0)));
-        //if (node is CinematicPlaySoundNode)
-        if (node is CinematicPlayAnimationNode)
-            return new Rect(node.position, new Vector2(200, 120));
-
-        return new Rect(node.position, new Vector2(200, 120));
+        return new Rect(node.position + offset, node.EditorSize);
     }
 
     public static Rect Connection(CinematicBaseNode node, Vector2 offset, int index, bool isInput, bool extraSpace)
@@ -48,7 +37,6 @@ public class CinematicEditorNode
         if (isInput)
         {
             con.x -= 3;
-            
         }
         else
         {
@@ -70,94 +58,7 @@ public class CinematicEditorNode
     }
 
     static void DrawContent(CinematicBaseNode node)
-    {
-        if (node is CinematicDialogueNode)
-        {
-            var dialogueNode = (CinematicDialogueNode)node;
-
-            using (new GUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Speaker", GUILayout.Width(LABELWIDTH));
-                List<CharacterData> allCharacters = GuidDatabase.FindAll<CharacterData>();
-                if (allCharacters.Count > 0)
-                {
-                    int selected = 0;
-                    var selectedList = allCharacters.Where(c => c.guid == dialogueNode.speakerGuid);
-                    if (selectedList.Count() == 1)
-                        selected = allCharacters.IndexOf(selectedList.First());
-
-                    int speakerIndex = EditorGUILayout.Popup(selected, allCharacters.Select(c => c.displayName).ToArray());
-                    dialogueNode.speakerGuid = allCharacters[speakerIndex].guid;
-                }
-                else
-                {
-                    dialogueNode.speakerGuid = EditorGUILayout.TextField(dialogueNode.speakerGuid);
-                }
-            }
-
-            EditorGUILayout.LabelField("Text");
-            dialogueNode.text = EditorGUILayout.TextArea(dialogueNode.text, GUILayout.Height(100));
-        }
-
-        else if (node is CinematicWaitNode)
-        {
-            var waitNode = (CinematicWaitNode)node;
-            using (new GUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Seconds", GUILayout.Width(LABELWIDTH));
-                waitNode.waitTime = EditorGUILayout.FloatField(waitNode.waitTime);
-            }                
-        }
-
-        else if (node is CinematicMoveCameraNode)
-        {
-            var moveCameraNode = (CinematicMoveCameraNode)node;
-            using (new GUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Move Type", GUILayout.Width(LABELWIDTH));
-                moveCameraNode.moveType = (CinematicMoveCameraNode.MoveType)EditorGUILayout.EnumPopup(moveCameraNode.moveType);
-            }
-            if(moveCameraNode.moveType == CinematicMoveCameraNode.MoveType.Curve)
-                moveCameraNode.curve = EditorGUILayout.CurveField(moveCameraNode.curve);
-
-            using (new GUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Target", GUILayout.Width(LABELWIDTH));
-                moveCameraNode.lookAtType = (CinematicMoveCameraNode.LookAtType)EditorGUILayout.EnumPopup(moveCameraNode.lookAtType);
-            }
-            if (moveCameraNode.lookAtType == CinematicMoveCameraNode.LookAtType.Transform)
-                moveCameraNode.lookAtTransform = EditorGUILayout.ObjectField(moveCameraNode.lookAtTransform, typeof(Transform), true) as Transform;
-            else
-                moveCameraNode.lookAtVector = EditorGUILayout.Vector3Field("", moveCameraNode.lookAtVector);
-
-            using (new GUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Wait", GUILayout.Width(LABELWIDTH));
-                moveCameraNode.waidForEnd = EditorGUILayout.Toggle(moveCameraNode.waidForEnd);
-            }
-        }
-
-        else if (node is CinematicBranchNode)
-        {
-            var branchNode = (CinematicBranchNode)node;
-            EditorGUILayout.LabelField("Branches");
-            branchNode.branches.ForEach(branch =>
-            {
-                using (new GUILayout.VerticalScope("box"))
-                {
-                    branch.condition = (CinematicBranchNode.Condition)EditorGUILayout.EnumPopup("Condition", branch.condition);
-                    if (branch.condition == CinematicBranchNode.Condition.True)
-                    {
-                        branch.conditionData = EditorGUILayout.TextField("Variable", branch.conditionData);
-                    }
-                }
-            });
-            if(GUILayout.Button("Add Branch"))
-            {
-                branchNode.branches.Add(new CinematicBranchNode.Branch());
-            }
-            EditorGUILayout.LabelField("Else");
-        }
+    {        
     /*
         else if (node is CinematicPlaySoundNode)
         {
@@ -180,13 +81,7 @@ public class CinematicEditorNode
             playEffectAtPositionNode.effect = EditorGUILayout.ObjectField("Effect", playEffectAtPositionNode.effect, typeof(GameObject), false) as GameObject;
             playEffectAtPositionNode.position = EditorGUILayout.Vector3Field("Position", playEffectAtPositionNode.position);
         }
-    */
-        else if (node is CinematicPlayAnimationNode)
-        {
-            var playAnimationNode = (CinematicPlayAnimationNode)node;
-            playAnimationNode.animator = EditorGUILayout.ObjectField("Animator", playAnimationNode.animator, typeof(Animator), true) as Animator;
-            playAnimationNode.animationClip = EditorGUILayout.ObjectField("Animation Clip", playAnimationNode.animationClip, typeof(AnimationClip), false) as AnimationClip;
-        }
+    */        
     }
 
     public static void DrawConnectionPoints(CinematicBaseNode node, Vector2 offset, GUIStyle inStyle, GUIStyle outStyle)

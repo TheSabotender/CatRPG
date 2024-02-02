@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEngine;
+#endif
 
 [System.Serializable]
 public class CinematicBranchNode : CinematicBaseNode
 {
-    public enum Condition { True }
-
     [System.Serializable]
     public class Branch
     {        
         public Condition condition;
-        public string conditionData;
         public string node;
     }
 
@@ -22,7 +24,7 @@ public class CinematicBranchNode : CinematicBaseNode
         nextNode = elseBranch;
         foreach (var branch in branches)
         {
-            if (Validate(branch.condition, branch.conditionData))
+            if (branch.condition.Validate())
             {
                 nextNode = branch.node;
                 break;
@@ -33,8 +35,31 @@ public class CinematicBranchNode : CinematicBaseNode
             yield return null;
     }
 
-    public static bool Validate(Condition condition, string data)
+#if UNITY_EDITOR
+    public override Vector2 EditorSize => new Vector2(200, 140 + branches.Count * 50);
+
+    public override void EditorDraw(float LABELWIDTH)
     {
-        return false;
+        var branchNode = (CinematicBranchNode)this;
+        EditorGUILayout.LabelField("Branches");
+        branchNode.branches.ForEach(branch =>
+        {
+            using (new GUILayout.VerticalScope("box"))
+            {
+                /*
+                branch.condition = (Condition)EditorGUILayout.EnumPopup("Condition", branch.condition);
+                if (branch.condition == CinematicBranchNode.Condition.True)
+                {
+                    branch.conditionData = EditorGUILayout.TextField("Variable", branch.conditionData);
+                }
+                */
+            }
+        });
+        if (GUILayout.Button("Add Branch"))
+        {
+            branchNode.branches.Add(new CinematicBranchNode.Branch());
+        }
+        EditorGUILayout.LabelField("Else");
     }
+    #endif
 }
