@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe09b58af19a3f4eb043a6260c51c79, type: 3}
   m_Name: King
   m_EditorClassIdentifier: 
-  _guid: 4c531a4c-f19b-49ff-9742-4d39aceddbb2
   displayName: King Bathan
-  portrait_small: {fileID: 0}
-  portrait_medium: {fileID: 0}
+  portrait_small: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  portrait_medium: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  order: 0
+  brief: King of the Crown of Claws
+  baseLore: King Bathan, your father, has accepted you into his family despite the
+    objections of his wife and royal court.
+  additionalLore: []

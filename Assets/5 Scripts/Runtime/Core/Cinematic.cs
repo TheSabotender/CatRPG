@@ -5,6 +5,7 @@ using UnityEngine;
 public class Cinematic : ScriptableObject
 {
     public string startNodeGuid;
+    public bool blocksMenu;
 
     [SerializeReference]
     public List<CinematicBaseNode> nodes;

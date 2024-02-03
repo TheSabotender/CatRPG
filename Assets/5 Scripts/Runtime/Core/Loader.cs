@@ -47,11 +47,11 @@ public class Loader : MonoBehaviour
 
     static IEnumerator DoLoad(int index, Action<GameScene> onComplete)
     {
-        if(currentSceneIndex == index)
+        if(currentSceneIndex >= 0 && currentSceneIndex == index)
         {
             Debug.Log("Scene is already loaded");
 
-            foreach (GameObject go in SceneManager.GetSceneAt(currentSceneIndex).GetRootGameObjects())
+            foreach (GameObject go in SceneManager.GetSceneByBuildIndex(currentSceneIndex).GetRootGameObjects())
             {
                 var gameScene = go.GetComponent<GameScene>();
                 if (gameScene != null)
@@ -67,28 +67,28 @@ public class Loader : MonoBehaviour
 
         //TODO show loading screen
 
-        if(currentSceneIndex >= 0)
+        if (currentSceneIndex >= 0)
         {
-            foreach(GameObject go in SceneManager.GetSceneAt(currentSceneIndex).GetRootGameObjects())
+            var prevScene = SceneManager.GetSceneByBuildIndex(currentSceneIndex);
+            foreach (GameObject go in prevScene.GetRootGameObjects())
             {
                 var gameScene = go.GetComponent<GameScene>();
                 if (gameScene != null)
                 {
-                    Debug.Log("Unloading " + SceneManager.GetSceneAt(currentSceneIndex).name);
+                    Debug.Log("Unloading " + prevScene.name);
                     gameScene.OnUnload();
                     break;
                 }
             }
 
-            yield return SceneManager.UnloadSceneAsync(currentSceneIndex);
+            yield return SceneManager.UnloadSceneAsync(prevScene);
         }
 
-        currentSceneIndex = index;
-        yield return SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
+        currentSceneIndex = index;        
+        yield return SceneManager.LoadSceneAsync(currentSceneIndex, LoadSceneMode.Additive);
+        var scene = SceneManager.GetSceneByBuildIndex(currentSceneIndex);
 
-        SceneManager.SetActiveScene(SceneManager.GetSceneAt(index));
-
-        foreach (GameObject go in SceneManager.GetSceneAt(currentSceneIndex).GetRootGameObjects())
+        foreach (GameObject go in scene.GetRootGameObjects())
         {
             var gameScene = go.GetComponent<GameScene>();
             if (gameScene != null)
@@ -98,10 +98,12 @@ public class Loader : MonoBehaviour
             }
         }
 
+        SceneManager.SetActiveScene(scene);
+
         //TODO hide loading screen
 
-        Debug.Log("Scene loading complete " + SceneManager.GetSceneAt(index).name);
-        foreach (GameObject go in SceneManager.GetSceneAt(currentSceneIndex).GetRootGameObjects())
+        Debug.Log("Scene loading complete " + scene.name);
+        foreach (GameObject go in scene.GetRootGameObjects())
         {
             var gameScene = go.GetComponent<GameScene>();
             if (gameScene != null)

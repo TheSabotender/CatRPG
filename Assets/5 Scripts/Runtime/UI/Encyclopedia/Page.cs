@@ -5,22 +5,25 @@ using UnityEngine.Events;
 
 public class Page : MonoBehaviour
 {
-    public Condition[] conditions;
-
-    [SerializeField]
-    private UnityEvent pageReloaded;
-
-    public void Reload()
+    [System.Serializable]
+    public class ConditionalText
     {
-        OnReloaded();
-        pageReloaded?.Invoke();
+        public Condition condition;
+        [TextArea] public string text;        
     }
 
-    protected virtual void OnReloaded() { }
+    public Condition[] conditions;
 
-    public void GotoPage(Page page)
+    public virtual void ReloadData() { }
+
+    public void GotoPage(int page)
     {
         Encyclopedia.Show(page);
+    }
+
+    public void GotoChapter(string chapter)
+    {
+        Encyclopedia.Show<PageChapter>(chapter, 1);
     }
 
     public void Hide()
@@ -40,5 +43,10 @@ public class Page : MonoBehaviour
         }        
 
         return true;
+    }
+
+    public virtual bool Search(string text)
+    {
+        return false;
     }
 }

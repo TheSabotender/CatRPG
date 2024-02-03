@@ -15,3 +15,7 @@ MonoBehaviour:
   displayName: Prince
   portrait_small: {fileID: 0}
   portrait_medium: {fileID: 0}
+  order: 4
+  brief: 
+  baseLore: 
+  additionalLore: []

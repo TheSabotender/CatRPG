@@ -54,7 +54,7 @@ public class AutoFlip : MonoBehaviour {
     }
     IEnumerator FlipToEnd()
     {
-        yield return new WaitForSeconds(DelayBeforeStarting);
+        yield return new WaitForSecondsRealtime(DelayBeforeStarting);
         float frameTime = PageFlipTime / AnimationFramesCount;
         float xc = (ControledBook.EndBottomRight.x + ControledBook.EndBottomLeft.x) / 2;
         float xl = ((ControledBook.EndBottomRight.x - ControledBook.EndBottomLeft.x) / 2)*0.9f;
@@ -81,14 +81,14 @@ public class AutoFlip : MonoBehaviour {
                 while (ControledBook.currentPage < ControledBook.TotalPageCount)
                 {
                     StartCoroutine(FlipRTL(xc, xl, h, frameTime, dx));
-                    yield return new WaitForSeconds(TimeBetweenPages);
+                    yield return new WaitForSecondsRealtime(TimeBetweenPages);
                 }
                 break;
             case FlipMode.LeftToRight:
                 while (ControledBook.currentPage > 0)
                 {
                     StartCoroutine(FlipLTR(xc, xl, h, frameTime, dx));
-                    yield return new WaitForSeconds(TimeBetweenPages);
+                    yield return new WaitForSecondsRealtime(TimeBetweenPages);
                 }
                 break;
         }
@@ -103,7 +103,7 @@ public class AutoFlip : MonoBehaviour {
         {
             y = (-h / (xl * xl)) * (x - xc) * (x - xc);
             ControledBook.UpdateBookRTLToPoint(new Vector3(x, y, 0));
-            yield return new WaitForSeconds(frameTime);
+            yield return new WaitForSecondsRealtime(frameTime);
             x -= dx;
         }
         ControledBook.ReleasePage();
@@ -117,7 +117,7 @@ public class AutoFlip : MonoBehaviour {
         {
             y = (-h / (xl * xl)) * (x - xc) * (x - xc);
             ControledBook.UpdateBookLTRToPoint(new Vector3(x, y, 0));
-            yield return new WaitForSeconds(frameTime);
+            yield return new WaitForSecondsRealtime(frameTime);
             x += dx;
         }
         ControledBook.ReleasePage();

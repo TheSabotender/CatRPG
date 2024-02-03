@@ -5,6 +5,8 @@ using UnityEngine;
 public class UIAnimator : MonoBehaviour
 {
     public AnimationClip playOnAwake;
+    public bool unscaled;
+
     public bool isPlaying { get; private set; }
 
     public void Play(AnimationClip clip, Action onComplete = null, float speed = 1, bool cancelExisting = false)
@@ -43,7 +45,10 @@ public class UIAnimator : MonoBehaviour
         while (time < clip.length)
         {
             clip.SampleAnimation(gameObject, time);
-            time += Time.deltaTime * speed;
+            if(unscaled)
+                time += Time.unscaledDeltaTime * speed;
+            else
+                time += Time.deltaTime * speed;            
             yield return null;
         }
         clip.SampleAnimation(gameObject, clip.length);

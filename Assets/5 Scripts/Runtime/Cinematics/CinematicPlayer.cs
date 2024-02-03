@@ -6,9 +6,11 @@ using UnityEngine;
 public class CinematicPlayer : MonoBehaviour
 {
     public Cinematic cinematic;
-    public bool playOnAwake;
+    public bool playOnAwake;    
 
     private Coroutine coroutine;
+
+    public static bool IsInBlockingCutscene { get; private set; }
 
     private void Start()
     {
@@ -32,6 +34,7 @@ public class CinematicPlayer : MonoBehaviour
 
     public IEnumerator RunCinematic(Action onComplete)
     {
+        IsInBlockingCutscene = cinematic.blocksMenu;
         CinematicBaseNode currentNode = cinematic.nodes.Where(n => n.guid == cinematic.startNodeGuid).First();
 
         while (currentNode != null)
@@ -45,6 +48,7 @@ public class CinematicPlayer : MonoBehaviour
                 currentNode = null;
         }
 
+        IsInBlockingCutscene = false;
         onComplete?.Invoke();
     }
 }

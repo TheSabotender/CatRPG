@@ -144,7 +144,7 @@ public class Book : MonoBehaviour {
     }
     public void UpdateBook()
     {
-        f = Vector3.Lerp(f, transformPoint(Input.mousePosition), Time.deltaTime * 10);
+        f = Vector3.Lerp(f, transformPoint(Input.mousePosition), Time.unscaledDeltaTime * 10);
         if (mode == FlipMode.RightToLeft)
             UpdateBookRTLToPoint(f);
         else
@@ -448,26 +448,29 @@ public class Book : MonoBehaviour {
             else
                 UpdateBookLTRToPoint(f + displacement);
 
-            yield return new WaitForSeconds(0.025f);
+            yield return new WaitForSecondsRealtime(0.025f);
         }
         if (onFinish != null)
             onFinish();
     }
 
-    private void SetPage(Transform parent, Page prefab)
+    private void SetPage(Transform parent, Page page)
     {
-        //TODO unparent and disable, to save memory
         Page existingPage = parent.GetComponentInChildren<Page>();
-        if(existingPage != null)
-            Destroy(existingPage.gameObject);
+        if (existingPage != null)
+        {
+            existingPage.transform.SetParent(null);
+            existingPage.gameObject.SetActive(false);
+        }
 
-        if (prefab == null)
-            return;
+        if(page != null)
+        {
+            page.transform.SetParent(parent, false);            
+            RectTransform rect = page.transform as RectTransform;
+            rect.anchoredPosition = Vector3.zero;
+            //rect.sizeDelta = Vector3.zero;
 
-        //TODO reparent and enable
-
-        //else
-        Page page = Instantiate(prefab, parent, false);
-        page.Reload();
+            page.gameObject.SetActive(true);
+        }        
     }
 }

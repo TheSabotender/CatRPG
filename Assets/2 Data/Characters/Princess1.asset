@@ -15,3 +15,7 @@ MonoBehaviour:
   displayName: Princess Nova
   portrait_small: {fileID: 0}
   portrait_medium: {fileID: 0}
+  order: 3
+  brief: 
+  baseLore: 
+  additionalLore: []

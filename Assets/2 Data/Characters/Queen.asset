@@ -15,3 +15,7 @@ MonoBehaviour:
   displayName: Queen
   portrait_small: {fileID: 0}
   portrait_medium: {fileID: 0}
+  order: 1
+  brief: 
+  baseLore: 
+  additionalLore: []

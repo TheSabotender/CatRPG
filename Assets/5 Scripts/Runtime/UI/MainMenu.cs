@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
 
     private GameScene gameScene;
 
+
     private void Awake()
     {
         if (instance != null)
@@ -28,29 +29,35 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        continueButton.interactable = !string.IsNullOrEmpty(SaveManager.LastSaveFile());
+        continueButton.interactable = SaveManager.CurrentSaveGame != null || !string.IsNullOrEmpty(SaveManager.LastSaveFile());
 
         Loader.LoadScene(introScene.BuildIndex, (gs) => gameScene = gs);
         menuAnimator.Play(showMenuSlow);
+        PauseManager.Pause(this);
     }
 
     public static void Show()
     {
-        instance.continueButton.interactable = !string.IsNullOrEmpty(SaveManager.LastSaveFile());
+        instance.continueButton.interactable = SaveManager.CurrentSaveGame != null || !string.IsNullOrEmpty(SaveManager.LastSaveFile());
         instance.menuAnimator.Play(instance.showMenuQuick);
+        PauseManager.Pause(instance);
     }
 
     public static void Hide()
     {
+        PauseManager.Unpause(instance);
         instance.continueButton.interactable = !string.IsNullOrEmpty(SaveManager.LastSaveFile());
         instance.menuAnimator.Play(instance.hideMenu);
     }
 
     public void Btn_NewGame()
     {
+        //TODO clear cutscenes and other persistent data
+
         SaveManager.NewGame("");
+        PauseManager.Unpause(instance);
         menuAnimator.Play(hideMenu, () =>
-        {
+        {            
             gameScene.GetComponent<CinematicPlayer>().Play(() =>
             {
                 //TODO load first tutorial level
@@ -60,8 +67,18 @@ public class MainMenu : MonoBehaviour
 
     public void Btn_Continue()
     {
+        //Already in game
+        if(SaveManager.CurrentSaveGame != null)
+        {
+            Hide();
+            return;
+        }
+
+        //TODO clear cutscenes and other persistent data
+
         var save = SaveManager.GetSaveInfo(SaveManager.LastSaveFile());
         SaveManager.Load(SaveManager.LastSaveFile());
+        PauseManager.Unpause(instance);
 
         menuAnimator.Play(hideMenu, () =>
         {
@@ -75,7 +92,7 @@ public class MainMenu : MonoBehaviour
 
     public void Btn_Load()
     {
-
+        //TODO clear cutscenes and other persistent data
     }
 
     public void Btn_Save()
@@ -85,7 +102,7 @@ public class MainMenu : MonoBehaviour
 
     public void Btn_Encyclo()
     {
-
+        Encyclopedia.Show(1);
     }
 
     public void Btn_Settings()

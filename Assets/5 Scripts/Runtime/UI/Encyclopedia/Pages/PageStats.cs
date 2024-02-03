@@ -6,9 +6,11 @@ public class PageStats : Page
 {
     public TMPro.TextMeshProUGUI heroName;
 
-    protected override void OnReloaded()
+    public void SetData()
     {
-        if(heroName != null)
-            heroName.text = SaveManager.CurrentSaveGame?.playerName;
+        if(this.heroName != null)
+            this.heroName.text = SaveManager.CurrentSaveGame?.playerName;
     }
+
+    public override void ReloadData() => SetData();
 }
