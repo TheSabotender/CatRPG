@@ -16,10 +16,10 @@ MonoBehaviour:
   blocksMenu: 1
   nodes:
   - rid: 854407427581018115
-  - rid: 854407427581018117
   - rid: 854407427581018120
   - rid: 854407427581018121
   - rid: 4379055792902111232
+  - rid: 4379055852387041281
   references:
     version: 2
     RefIds:
@@ -28,26 +28,18 @@ MonoBehaviour:
       data:
         name: new Dialogue Node
         guid: 79c51ebb-7135-428c-88b5-a8f62fc607e5
-        position: {x: -389, y: 379}
-        nextNode: 4e3e642a-e505-4f4c-aca3-6e235c7ea028
-        speakerGuid: f2081967-067a-40af-ad06-cbb941f70efd
+        position: {x: -399, y: 314}
+        nextNode: 3404966a-f488-437a-84d8-13df8a827479
+        speakerGuid: 895d317c-d026-4b1c-aef0-2c88fb687707
         text: Who goes there?!
-    - rid: 854407427581018117
-      type: {class: CinematicWaitNode, ns: , asm: GameRuntime}
-      data:
-        name: new Wait Node
-        guid: 4e3e642a-e505-4f4c-aca3-6e235c7ea028
-        position: {x: -142, y: 408}
-        nextNode: 912f9af9-6b45-41a5-a217-2678ea12e44c
-        waitTime: 3
     - rid: 854407427581018120
       type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
       data:
         name: new Dialogue Node
         guid: 912f9af9-6b45-41a5-a217-2678ea12e44c
-        position: {x: 73, y: 504}
+        position: {x: 67, y: 309}
         nextNode: cfe86760-ce1b-4785-86b1-81eb491e92cb
-        speakerGuid: f2081967-067a-40af-ad06-cbb941f70efd
+        speakerGuid: 895d317c-d026-4b1c-aef0-2c88fb687707
         text: I'm here to see the king.
     - rid: 854407427581018121
       type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
@@ -56,7 +48,7 @@ MonoBehaviour:
         guid: eeb0f340-c1ff-4326-b5be-5b7d281f81fe
         position: {x: 520, y: 570}
         nextNode: 
-        speakerGuid: f2081967-067a-40af-ad06-cbb941f70efd
+        speakerGuid: 895d317c-d026-4b1c-aef0-2c88fb687707
         text: On what business?
     - rid: 4379055792902111232
       type: {class: CinematicWaitNode, ns: , asm: GameRuntime}
@@ -66,3 +58,21 @@ MonoBehaviour:
         position: {x: 297, y: 544}
         nextNode: eeb0f340-c1ff-4326-b5be-5b7d281f81fe
         waitTime: 1
+    - rid: 4379055852387041281
+      type: {class: CinematicMoveCameraNode, ns: , asm: GameRuntime}
+      data:
+        name: new MoveCamera Node
+        guid: 3404966a-f488-437a-84d8-13df8a827479
+        position: {x: -146, y: 319}
+        nextNode: 912f9af9-6b45-41a5-a217-2678ea12e44c
+        moveType: 0
+        lookAtType: 0
+        lookAtTransform: {fileID: 0}
+        lookAtVector: {x: 0, y: 0, z: 0}
+        curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        waidForEnd: 1
