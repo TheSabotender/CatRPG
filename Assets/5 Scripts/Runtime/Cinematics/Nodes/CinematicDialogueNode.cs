@@ -11,15 +11,38 @@ public class CinematicDialogueNode : CinematicBaseNode
 {
     public string speakerGuid;
     public string text;
+    public bool nextIsOptions;
+
+    private bool isDialogueActive;
 
     public override IEnumerator Run()
     {
-        Debug.Log("[Dialogue] " + speakerGuid + ": " + text);
-        if (false)
+        string speaker = string.Empty;
+        CharacterAnimator animator = null;
+        CharacterData character = GuidDatabase.Find<CharacterData>(speakerGuid);
+        if (character != null)
+        {
+            speaker = character.displayName;
+            foreach(var anim in GameObject.FindObjectsOfType<CharacterAnimator>())
+            {
+                if (anim.characterData == character)
+                {
+                    animator = anim;
+                    break;
+                }
+            }
+        }
+
+        Debug.Log("[Dialogue] " + speaker + ": " + text);
+
+        isDialogueActive = true;
+        Dialogue.ShowDialogue(speaker, text, animator, !nextIsOptions, () => isDialogueActive = false);
+
+        while (isDialogueActive)
             yield return null;
     }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR   
     public override Vector2 EditorSize => new Vector2(200, 220);
 
     public override void EditorDraw(float LABELWIDTH)

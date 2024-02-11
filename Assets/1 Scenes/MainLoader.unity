@@ -263,6 +263,10 @@ MonoBehaviour:
     _name: Menu
     _path: Assets/1 Scenes/Persistent/Menu.unity
     _buildIndex: 1
+  - _sceneOB: {fileID: 102900000, guid: 683cde94a8e43284f8af72de1e80ca62, type: 3}
+    _name: UI
+    _path: Assets/1 Scenes/Persistent/UI.unity
+    _buildIndex: 4
 --- !u!1 &722908857
 GameObject:
   m_ObjectHideFlags: 0

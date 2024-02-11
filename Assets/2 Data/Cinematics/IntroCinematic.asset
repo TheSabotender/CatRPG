@@ -20,6 +20,7 @@ MonoBehaviour:
   - rid: 854407427581018121
   - rid: 4379055792902111232
   - rid: 4379055852387041281
+  - rid: 4379055983055339528
   references:
     version: 2
     RefIds:
@@ -30,8 +31,9 @@ MonoBehaviour:
         guid: 79c51ebb-7135-428c-88b5-a8f62fc607e5
         position: {x: -399, y: 314}
         nextNode: 3404966a-f488-437a-84d8-13df8a827479
-        speakerGuid: 895d317c-d026-4b1c-aef0-2c88fb687707
+        speakerGuid: 9bda8da6-e0fe-499d-9548-0ecca7be703f
         text: Who goes there?!
+        nextIsOptions: 0
     - rid: 854407427581018120
       type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
       data:
@@ -39,8 +41,9 @@ MonoBehaviour:
         guid: 912f9af9-6b45-41a5-a217-2678ea12e44c
         position: {x: 67, y: 309}
         nextNode: cfe86760-ce1b-4785-86b1-81eb491e92cb
-        speakerGuid: 895d317c-d026-4b1c-aef0-2c88fb687707
+        speakerGuid: 9bda8da6-e0fe-499d-9548-0ecca7be703f
         text: I'm here to see the king.
+        nextIsOptions: 0
     - rid: 854407427581018121
       type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
       data:
@@ -48,8 +51,9 @@ MonoBehaviour:
         guid: eeb0f340-c1ff-4326-b5be-5b7d281f81fe
         position: {x: 520, y: 570}
         nextNode: 
-        speakerGuid: 895d317c-d026-4b1c-aef0-2c88fb687707
+        speakerGuid: 9bda8da6-e0fe-499d-9548-0ecca7be703f
         text: On what business?
+        nextIsOptions: 0
     - rid: 4379055792902111232
       type: {class: CinematicWaitNode, ns: , asm: GameRuntime}
       data:
@@ -76,3 +80,13 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         waidForEnd: 1
+    - rid: 4379055983055339528
+      type: {class: CinematicBranchNode, ns: , asm: GameRuntime}
+      data:
+        name: new Branch Node
+        guid: b84d4196-cd6f-44d9-b8bf-f93dee6f5f27
+        position: {x: 368, y: 175}
+        nextNode: 
+        branches:
+        - node: 
+        elseBranch: 

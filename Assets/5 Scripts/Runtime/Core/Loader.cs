@@ -28,7 +28,12 @@ public class Loader : MonoBehaviour
     {
         StartCoroutine(DoLoadPersistent());
     }
-    
+
+    private void OnDestroy()
+    {
+        Variable.CleanVariables();
+    }
+
 
     public static void LoadScene(int index, Action<GameScene> onComplete)
     {

@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/1 Scenes/Persistent/Pause.unity
     guid: 03b88010a1e11894c8a544bf01a1fde8
   - enabled: 1
+    path: Assets/1 Scenes/Persistent/UI.unity
+    guid: 683cde94a8e43284f8af72de1e80ca62
+  - enabled: 1
     path: Assets/1 Scenes/GameScenes/IntroCutscene.unity
     guid: 921a2832f62108947aa2f9a74bbf4938
   m_configObjects: {}

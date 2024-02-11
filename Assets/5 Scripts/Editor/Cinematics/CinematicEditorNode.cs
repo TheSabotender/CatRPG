@@ -43,45 +43,12 @@ public class CinematicEditorNode
             con.x += body.width - 7;
 
             if(node is CinematicBranchNode)
-                con.y += 80 + (extraSpace ? 18 : 0) + index * 45;
+                con.y += 80 + (extraSpace ? 18 : 0) + (index * 45);
+            if (node is CinematicDialogueOptionsNode)
+                con.y += 55 + (index * 20);
         }
         
         return con;
-    }
-
-    static int ConnectionCount(CinematicBaseNode node)
-    {
-        if (node is CinematicBranchNode)
-            return ((CinematicBranchNode)node).branches.Count;
-
-        return 1;
-    }
-
-    static void DrawContent(CinematicBaseNode node)
-    {        
-    /*
-        else if (node is CinematicPlaySoundNode)
-        {
-            var playSoundNode = (CinematicPlaySoundNode)node;
-            playSoundNode.audioClip = EditorGUILayout.ObjectField("Audio Clip", playSoundNode.audioClip, typeof(AudioClip), false) as AudioClip;
-        }
-    
-        else if (node is CinematicPlayMusicNode)
-        {
-            var playMusicNode = (CinematicPlayMusicNode)node;
-            playMusicNode.audioClip = EditorGUILayout.ObjectField("Audio Clip", playMusicNode.audioClip, typeof(AudioClip), false) as AudioClip;
-        }
-    
-        else if (node is CinematicPlayEffectNode)
-        {
-            var playEffectNode = (CinematicPlayEffectNode)node;
-            playEffectNode.effect = EditorGUILayout.ObjectField("Effect", playEffectNode.effect, typeof(GameObject), false) as GameObject;
-
-            var playEffectAtPositionNode = (CinematicPlayEffectAtPositionNode)node;
-            playEffectAtPositionNode.effect = EditorGUILayout.ObjectField("Effect", playEffectAtPositionNode.effect, typeof(GameObject), false) as GameObject;
-            playEffectAtPositionNode.position = EditorGUILayout.Vector3Field("Position", playEffectAtPositionNode.position);
-        }
-    */        
     }
 
     public static void DrawConnectionPoints(CinematicBaseNode node, Vector2 offset, GUIStyle inStyle, GUIStyle outStyle)
@@ -91,10 +58,10 @@ public class CinematicEditorNode
         GUI.Box(input, "", inStyle);
 
         //Draw outputs
-        for (int i = 0; i <= ConnectionCount(node); i++)
+        for (int i = 0; i < node.Connections; i++)
         {
-            Rect output = Connection(node, offset, i, false, i == ConnectionCount(node));
-            GUI.Box(output, "", outStyle);
+            Rect output = Connection(node, offset, i, false, node is CinematicBranchNode && i == node.Connections -1);
+            GUI.Box(output, i.ToString(), outStyle);
         }
     }
 
@@ -137,9 +104,9 @@ public class CinematicEditorNode
                 return (NodeInteractionType.Disconnect, -1);
             }
         }
-        for(int i = 0; i <= ConnectionCount(node); i++)
+        for(int i = 0; i < node.Connections; i++)
         {
-            if (Connection(node, offset, i, false, i == ConnectionCount(node)).Contains(e.mousePosition))
+            if (Connection(node, offset, i, false, node is CinematicBranchNode && i == node.Connections - 1).Contains(e.mousePosition))
             {
                 if (e.type == EventType.MouseDown && e.button == 0)
                 {

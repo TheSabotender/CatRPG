@@ -28,8 +28,7 @@ public class CinematicEditorWindow : EditorWindow
 
     private string draggingNode;
 
-    [UnityEditor.MenuItem("Window/Cinematic Editor")]
-    public static void OpenWindow(Cinematic cinematic = null)
+    public static void OpenWindow(Cinematic cinematic)
     {
         var window = GetWindow<CinematicEditorWindow>();
         window.titleContent = new GUIContent("Cinematic Editor");
@@ -151,6 +150,22 @@ public class CinematicEditorWindow : EditorWindow
                     }
                     break;
 
+                case nameof(CinematicDialogueOptionsNode):
+                    var dialogueOptionsNode = (CinematicDialogueOptionsNode)node;
+                    if(dialogueOptionsNode.options != null)
+                    {
+                        for (int i = 0; i < dialogueOptionsNode.options.Length; i++)
+                        {
+                            var option = dialogueOptionsNode.options[i];
+                            if (!string.IsNullOrEmpty(option.node))
+                            {
+                                var nextNode = cinematic.nodes.Where(n => n.guid == option.node).First();
+                                DrawLine(CinematicEditorNode.Connection(nextNode, offset, 0, true, false).position + lineOffset, CinematicEditorNode.Connection(node, offset, i, false, false).position + lineOffset);
+                            }
+                        }
+                    }
+                    break;
+
                 default:
                     if (!string.IsNullOrEmpty(node.nextNode))
                     {
@@ -181,7 +196,13 @@ public class CinematicEditorWindow : EditorWindow
             {
                 CinematicBaseNode node = cinematic.nodes.Where(n => n.guid == currentNode).First();
                 CinematicBranchNode branchNode = node as CinematicBranchNode;
-                Rect rect = CinematicEditorNode.Connection(node, offset, selectedConnectionPoint, false, (branchNode != null && selectedConnectionPoint == branchNode.branches.Count));
+                CinematicDialogueOptionsNode optionsNode = node as CinematicDialogueOptionsNode;
+
+                Rect rect = CinematicEditorNode.Connection(node, offset, selectedConnectionPoint, false, false);
+                if(branchNode != null)
+                    rect = CinematicEditorNode.Connection(node, offset, selectedConnectionPoint, false, selectedConnectionPoint == branchNode.branches.Count);
+                if (optionsNode != null)
+                    rect = CinematicEditorNode.Connection(node, offset, selectedConnectionPoint, false, false);
                 DrawLine(e.mousePosition, rect.center);
             }
 
@@ -239,14 +260,13 @@ public class CinematicEditorWindow : EditorWindow
     {
         GenericMenu genericMenu = new GenericMenu();
                 
-        // if is over a node
-        //genericMenu.AddItem(new GUIContent("Remove node"), false, () => { OnClickRemoveNode(); });
-
         // not over a node
         genericMenu.AddItem(new GUIContent("Dialogue"), false, () => { OnClickAddNode<CinematicDialogueNode>(position); });
+        genericMenu.AddItem(new GUIContent("Options"), false, () => { OnClickAddNode<CinematicDialogueOptionsNode>(position); });
         genericMenu.AddItem(new GUIContent("Wait"), false, () => { OnClickAddNode<CinematicWaitNode>(position); });
         genericMenu.AddItem(new GUIContent("Branch"), false, () => { OnClickAddNode<CinematicBranchNode>(position); });
         genericMenu.AddItem(new GUIContent("Camera"), false, () => { OnClickAddNode<CinematicMoveCameraNode>(position); });
+        genericMenu.AddItem(new GUIContent("SetVar"), false, () => { OnClickAddNode<CinematicSetVariableNode>(position); });
 
         genericMenu.ShowAsContext();
     }
@@ -257,6 +277,9 @@ public class CinematicEditorWindow : EditorWindow
 
         if(node is CinematicBranchNode)
             (node as CinematicBranchNode).branches = new List<CinematicBranchNode.Branch>();
+
+        if (node is CinematicDialogueOptionsNode)
+            (node as CinematicDialogueOptionsNode).options = new CinematicDialogueOptionsNode.Option[4];
 
         node.name = "new " + typeof(T).Name.Replace("Cinematic", "").Replace("Node", " Node");
         node.position = mousePosition - offset;
@@ -369,10 +392,14 @@ public class CinematicEditorWindow : EditorWindow
     {
         if (cursorMode == CursorMode.Connect && currentNode != node.guid)
         {
+            //From output
+            //first node is the one we are connecting from
+            //node is the one we are connecting to
             if (selectedConnectionPoint >= 0)
-            {
+            {                
                 CinematicBaseNode firstNode = cinematic.nodes.Where(n => n.guid == currentNode).First();
                 CinematicBranchNode branchNode = firstNode as CinematicBranchNode;
+                CinematicDialogueOptionsNode optionsNode = firstNode as CinematicDialogueOptionsNode;
                 if (branchNode != null && selectedConnectionPoint == branchNode.branches.Count)
                 {
                     branchNode.elseBranch = node.guid;
@@ -381,12 +408,62 @@ public class CinematicEditorWindow : EditorWindow
                 {
                     branchNode.branches[selectedConnectionPoint].node = node.guid;
                 }
+                if (optionsNode != null)
+                {
+                    optionsNode.options[selectedConnectionPoint].node = node.guid;
+                }
+
                 firstNode.nextNode = node.guid;
+
+                if (firstNode is CinematicDialogueNode)
+                {
+                    CinematicDialogueNode dialogue = firstNode as CinematicDialogueNode;
+                    dialogue.nextIsOptions = false;
+
+                    if (node is CinematicDialogueOptionsNode)
+                    {
+                        CinematicDialogueOptionsNode options = node as CinematicDialogueOptionsNode;
+                        options.lastSpeaker = dialogue.speakerGuid;
+                        options.lastText = dialogue.text;
+                        dialogue.nextIsOptions = true;
+                    }
+                } else if (node is CinematicDialogueOptionsNode)
+                {
+                    CinematicDialogueOptionsNode options = node as CinematicDialogueOptionsNode;
+                    options.lastSpeaker = string.Empty;
+                    options.lastText = string.Empty;
+                }
+
+
             }
+
+            //From input
+            //secondNode is the one we are connecting to
+            //node is the one we are connecting to
             else
             {
+                CinematicBaseNode firstNode = cinematic.nodes.Where(n => n.guid == currentNode).First();
                 CinematicBaseNode secondNode = cinematic.nodes.Where(n => n.guid == node.guid).First();
                 secondNode.nextNode = currentNode;
+
+                if (secondNode is CinematicDialogueNode)
+                {
+                    CinematicDialogueNode dialogue = secondNode as CinematicDialogueNode;
+                    dialogue.nextIsOptions = false;
+
+                    if (firstNode is CinematicDialogueOptionsNode)
+                    {
+                        CinematicDialogueOptionsNode options = firstNode as CinematicDialogueOptionsNode;
+                        options.lastSpeaker = dialogue.speakerGuid;
+                        options.lastText = dialogue.text;
+                        dialogue.nextIsOptions = true;
+                    }
+                } else if (firstNode is CinematicDialogueOptionsNode)
+                {
+                    CinematicDialogueOptionsNode options = firstNode as CinematicDialogueOptionsNode;
+                    options.lastSpeaker = string.Empty;
+                    options.lastText = string.Empty;
+                }
             }
 
             ClearConnectionSelection();

@@ -3,13 +3,7 @@ using UnityEngine;
 
 public class CharacterAnimator : MonoBehaviour
 {
-    [System.Serializable]
-    public class Phoneme
-    {
-        public string blendshape;
-        public string[] triggers;
-    }
-
+    public CharacterData characterData;
     public SkinnedMeshRenderer head;
 
     [Header("Blinking")]
@@ -19,7 +13,7 @@ public class CharacterAnimator : MonoBehaviour
 
     [Header("Lip Sync")]    
     public float blendshapeSpeed = 1f;
-    public Phoneme[] phonemes;
+    public LipsyncProfile profile;
 
     private Coroutine blinkRoutine;
     private Coroutine blendshapeRoutine;
@@ -66,7 +60,7 @@ public class CharacterAnimator : MonoBehaviour
     public void LipSync(string phoneme)
     {
 
-        Phoneme p = GetPhoneme(phoneme);
+        LipsyncProfile.Phoneme p = GetPhoneme(phoneme);
 
         // if phoneme is not found, use the phoneme as the blendshape
         if (p != null)
@@ -87,27 +81,26 @@ public class CharacterAnimator : MonoBehaviour
         }
     }
 
-    private Phoneme GetPhoneme(string phoneme)
+    private LipsyncProfile.Phoneme GetPhoneme(string phoneme)
     {
-        foreach (var p in phonemes)
+        foreach (var p in profile.phonemes)
         {
             foreach (var trigger in p.triggers)
             {
-                if (trigger == phoneme)
+                if (trigger.ToLower() == phoneme.ToLower())
                     return p;
             }
         }
         return null;
     }
 
-    private IEnumerator BlendshapeRoutine(Phoneme phoneme)
+    private IEnumerator BlendshapeRoutine(LipsyncProfile.Phoneme phoneme)
     {
         
         float t = 0;
         if(phoneme == null)
         {
             t = 1;
-            //phoneme = "v_sil";
         }
 
         // apply viseme blendshapes
@@ -122,7 +115,7 @@ public class CharacterAnimator : MonoBehaviour
                     if (shape != null && shape == phoneme.blendshape)
                     {
                         float current = head.GetBlendShapeWeight(i);
-                        head.SetBlendShapeWeight(i, Mathf.Lerp(current, 100, t));
+                        head.SetBlendShapeWeight(i, Mathf.Lerp(current, phoneme.weight, t));
                     }
                 }
                 yield return null;
@@ -140,9 +133,10 @@ public class CharacterAnimator : MonoBehaviour
                 if (shape != null && shape.StartsWith("v_"))
                 {
                     float current = head.GetBlendShapeWeight(i);
-                    head.SetBlendShapeWeight(i, Mathf.Lerp(current, 0, t * 100));
+                    head.SetBlendShapeWeight(i, Mathf.Lerp(current, 0, t));
                 }
             }
+            yield return null;
         }
 
         // Ensure all visemes are reset

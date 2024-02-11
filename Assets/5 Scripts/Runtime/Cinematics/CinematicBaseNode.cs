@@ -20,6 +20,7 @@ public class CinematicBaseNode
     }
 
 #if UNITY_EDITOR
+    public virtual int Connections => 1;
 
     public virtual Vector2 EditorSize => new Vector2(200, 120);
 
