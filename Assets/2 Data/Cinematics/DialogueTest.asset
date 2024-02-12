@@ -33,7 +33,7 @@ MonoBehaviour:
         guid: 3c46ac00-c373-4bdd-ba36-fd034da8f120
         position: {x: 365, y: 217}
         nextNode: 066c11d6-0a28-4218-9e69-ed4f30a026dd
-        speakerGuid: b5fdc148-4ac3-4792-8353-a2009f08100a
+        speakerGuid: 2540ac33-a3cb-4c53-a29e-7a46edec4903
         text: Hello, and welcome to the dialogue test scene.
         nextIsOptions: 0
     - rid: 4379055983055339521
@@ -51,7 +51,7 @@ MonoBehaviour:
         guid: 066c11d6-0a28-4218-9e69-ed4f30a026dd
         position: {x: 584, y: 260}
         nextNode: ed1c6586-2a90-4b44-83bb-4338c368fa64
-        speakerGuid: b5fdc148-4ac3-4792-8353-a2009f08100a
+        speakerGuid: 2540ac33-a3cb-4c53-a29e-7a46edec4903
         text: So, what do you think?
         nextIsOptions: 1
     - rid: 4379055983055339524
@@ -61,7 +61,7 @@ MonoBehaviour:
         guid: a86cf75c-0088-4017-a5b7-174d78958bc6
         position: {x: 1129, y: -77}
         nextNode: cba80005-076a-46e6-93c1-d235bee423bb
-        speakerGuid: b5fdc148-4ac3-4792-8353-a2009f08100a
+        speakerGuid: 2540ac33-a3cb-4c53-a29e-7a46edec4903
         text: No need to be tho enthusiastic
         nextIsOptions: 0
     - rid: 4379055983055339525
@@ -71,7 +71,7 @@ MonoBehaviour:
         guid: cdf0a2dc-e896-485c-b2fd-d43f7fe2ac1f
         position: {x: 1168, y: 144}
         nextNode: cba80005-076a-46e6-93c1-d235bee423bb
-        speakerGuid: b5fdc148-4ac3-4792-8353-a2009f08100a
+        speakerGuid: 2540ac33-a3cb-4c53-a29e-7a46edec4903
         text: Nice, glad you liked it
         nextIsOptions: 0
     - rid: 4379055983055339526
@@ -81,7 +81,7 @@ MonoBehaviour:
         guid: 7650bc96-cc51-48cf-8960-46c01834c668
         position: {x: 1167, y: 363}
         nextNode: cba80005-076a-46e6-93c1-d235bee423bb
-        speakerGuid: b5fdc148-4ac3-4792-8353-a2009f08100a
+        speakerGuid: 2540ac33-a3cb-4c53-a29e-7a46edec4903
         text: Well screw you then
         nextIsOptions: 0
     - rid: 4379055983055339527
@@ -91,7 +91,7 @@ MonoBehaviour:
         guid: 9e0e3402-0e33-4b2d-8771-91cc7abc2ffc
         position: {x: 1125, y: 595}
         nextNode: cba80005-076a-46e6-93c1-d235bee423bb
-        speakerGuid: b5fdc148-4ac3-4792-8353-a2009f08100a
+        speakerGuid: 2540ac33-a3cb-4c53-a29e-7a46edec4903
         text: Really? no opinion at all?
         nextIsOptions: 0
     - rid: 4379055983055339529
@@ -100,7 +100,7 @@ MonoBehaviour:
         name: new DialogueOptions Node
         guid: ed1c6586-2a90-4b44-83bb-4338c368fa64
         position: {x: 832, y: 311}
-        nextNode: a86cf75c-0088-4017-a5b7-174d78958bc6
+        nextNode: 9e0e3402-0e33-4b2d-8771-91cc7abc2ffc
         options:
         - text: It's ok.
           node: a86cf75c-0088-4017-a5b7-174d78958bc6

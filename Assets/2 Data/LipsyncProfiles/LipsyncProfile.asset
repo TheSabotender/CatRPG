@@ -22,7 +22,7 @@ MonoBehaviour:
     - c
     - h
   - blendshape: v_eee
-    weight: 100
+    weight: 37.8
     triggers:
     - e
     - i
