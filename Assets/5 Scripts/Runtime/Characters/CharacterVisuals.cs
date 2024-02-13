@@ -23,9 +23,9 @@ public class CharacterVisuals : MonoBehaviour
     {
         if (blendShapes == null) return;
 
-        foreach((string key, float value) in blendShapes)
+        foreach (SkinnedMeshRenderer smr in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
-            foreach (SkinnedMeshRenderer smr in GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach ((string key, float value) in blendShapes)
             {
                 int index = smr.sharedMesh.GetBlendShapeIndex(key);
                 if(index >= 0)
