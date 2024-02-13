@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Dialogue : MonoBehaviour
 {
@@ -16,6 +14,7 @@ public class Dialogue : MonoBehaviour
     public UIAnimator messageAnimator;
     public AnimationClip showDialogue;
     public AnimationClip hideDialogue;
+    public RectTransform headerBox;
     public TMPro.TextMeshProUGUI messageHeader;
     public TMPro.TextMeshProUGUI messageBody;
     public float typingSpeed = 1f;
@@ -24,6 +23,7 @@ public class Dialogue : MonoBehaviour
     public AnimationClip showOptions;
     public AnimationClip hideOptions;
     public GameObject dialogueHistory;
+    public RectTransform optionsHeaderBox;
     public TMPro.TextMeshProUGUI optionsHeader;
     public TMPro.TextMeshProUGUI optionsBody;
     public TMPro.TextMeshProUGUI option1_text;
@@ -71,7 +71,9 @@ public class Dialogue : MonoBehaviour
     private IEnumerator RunDialogue(string header, string body, bool doWait, CharacterAnimator character)
     {
         isTyping = true;
-        messageHeader.text = header;
+        headerBox.gameObject.SetActive(!string.IsNullOrEmpty(header));
+        headerBox.sizeDelta = new Vector2((header.Length * 20) + 30, headerBox.sizeDelta.y);
+        messageHeader.text = header;        
         messageBody.text = string.Empty;        
 
         int i = 0;
@@ -83,7 +85,9 @@ public class Dialogue : MonoBehaviour
                 character.LipSync(letter.ToString());
 
             yield return new WaitForSeconds(0.1f / typingSpeed);
-        }        
+        }
+        if (character != null)
+            character.LipSync();
         messageBody.text = body;
         isTyping = false;
 
@@ -96,8 +100,6 @@ public class Dialogue : MonoBehaviour
 
     public void OnClickDialogue()
     {
-        isDialogueActive = false;
-
         if(isTyping)
         {
             isTyping = false;
@@ -125,6 +127,8 @@ public class Dialogue : MonoBehaviour
         instance.dialogueHistory.SetActive(!string.IsNullOrEmpty(lastText));
         if (!string.IsNullOrEmpty(lastText))
         {
+            instance.optionsHeaderBox.gameObject.SetActive(!string.IsNullOrEmpty(lastSpeaker));
+            instance.optionsHeaderBox.sizeDelta = new Vector2((lastSpeaker.Length * 20) + 30, instance.optionsHeaderBox.sizeDelta.y);
             instance.optionsHeader.text = lastSpeaker;
             instance.optionsBody.text = lastText;
         }

@@ -146,8 +146,6 @@ GameObject:
   - component: {fileID: 3985622051883025762}
   - component: {fileID: 8205461358530770474}
   - component: {fileID: 6655199275459006982}
-  - component: {fileID: 3988040626672683088}
-  - component: {fileID: 1000973756317598527}
   m_Layer: 5
   m_Name: Speaker
   m_TagString: Untagged
@@ -173,7 +171,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: -12}
-  m_SizeDelta: {x: 0, y: 42.7424}
+  m_SizeDelta: {x: 165.42, y: 42.7424}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &8205461358530770474
 CanvasRenderer:
@@ -213,46 +211,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3988040626672683088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971056747742476287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 0
---- !u!114 &1000973756317598527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971056747742476287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 10
-    m_Right: 10
-    m_Top: 5
-    m_Bottom: 0
-  m_ChildAlignment: 3
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 1
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &1081351083309645298
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +264,7 @@ MonoBehaviour:
   messageAnimator: {fileID: 4805065520930673674}
   showDialogue: {fileID: 7400000, guid: 9082f7b86117ed74d9e59dde67a4aed7, type: 2}
   hideDialogue: {fileID: 7400000, guid: 106054182a03d6e4f9987bc3e7d0a296, type: 2}
+  headerBox: {fileID: 8941091304825856904}
   messageHeader: {fileID: 568930700478229906}
   messageBody: {fileID: 8888011960290799336}
   typingSpeed: 2
@@ -313,6 +272,7 @@ MonoBehaviour:
   showOptions: {fileID: 7400000, guid: 581a1963cdebebc4f938f4a7a81d4588, type: 2}
   hideOptions: {fileID: 7400000, guid: 83f9b92323fc781418fa5f32d27649bf, type: 2}
   dialogueHistory: {fileID: 1762058873511325232}
+  optionsHeaderBox: {fileID: 3985622051883025762}
   optionsHeader: {fileID: 6095570759522843209}
   optionsBody: {fileID: 9091083801807967573}
   option1_text: {fileID: 8959248374715137053}
@@ -908,7 +868,6 @@ GameObject:
   - component: {fileID: 8258754357284845061}
   - component: {fileID: 2191476762092115516}
   - component: {fileID: 568930700478229906}
-  - component: {fileID: 740737764882219085}
   m_Layer: 5
   m_Name: Speaker
   m_TagString: Untagged
@@ -931,9 +890,9 @@ RectTransform:
   m_Father: {fileID: 8941091304825856904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 10, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 15, y: 1.0114479}
+  m_SizeDelta: {x: -15, y: -7.0228996}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &2191476762092115516
 CanvasRenderer:
@@ -1033,20 +992,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &740737764882219085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3242430845450352310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 0
 --- !u!1 &3570840927400691035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1595,8 +1540,6 @@ GameObject:
   - component: {fileID: 8941091304825856904}
   - component: {fileID: 9147367031620056608}
   - component: {fileID: 7987292292526788953}
-  - component: {fileID: 9042317689734560631}
-  - component: {fileID: 7493199021994674332}
   m_Layer: 5
   m_Name: SpeakerBox
   m_TagString: Untagged
@@ -1622,7 +1565,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: -12}
-  m_SizeDelta: {x: 0, y: 57.0229}
+  m_SizeDelta: {x: 165.42, y: 57.0229}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &9147367031620056608
 CanvasRenderer:
@@ -1662,46 +1605,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &9042317689734560631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7432919974381678157}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 0
---- !u!114 &7493199021994674332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7432919974381678157}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 10
-    m_Right: 10
-    m_Top: 5
-    m_Bottom: 0
-  m_ChildAlignment: 3
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 1
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &7651144115398712766
 GameObject:
   m_ObjectHideFlags: 0
@@ -2293,7 +2196,6 @@ GameObject:
   - component: {fileID: 798279583098095499}
   - component: {fileID: 8439715806569354719}
   - component: {fileID: 6095570759522843209}
-  - component: {fileID: 2409461900676354474}
   m_Layer: 5
   m_Name: Speaker
   m_TagString: Untagged
@@ -2316,9 +2218,9 @@ RectTransform:
   m_Father: {fileID: 3985622051883025762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 9.999992, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 15, y: -6.1287994}
+  m_SizeDelta: {x: -15, y: 7.257599}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &8439715806569354719
 CanvasRenderer:
@@ -2418,17 +2320,3 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2409461900676354474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9170878524437279305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 0

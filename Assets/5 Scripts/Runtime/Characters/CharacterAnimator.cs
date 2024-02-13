@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static LipsyncProfile;
 
 public class CharacterAnimator : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class CharacterAnimator : MonoBehaviour
             currentLipsync = new Dictionary<string, float>();
         if (blinkRoutine == null)
             blinkRoutine = StartCoroutine(Blink());
+        if (blendshapeRoutine == null)
+            blendshapeRoutine = StartCoroutine(BlendshapeRoutine());
 
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
     }
@@ -85,20 +88,19 @@ public class CharacterAnimator : MonoBehaviour
         // if phoneme is not found, use the phoneme as the blendshape
         if (p != null)
         {
-            if (blendshapeRoutine != null)
-                StopCoroutine(blendshapeRoutine);
-
-            StartCoroutine(BlendshapeRoutine(p));
+            currentLipsync[p.blendshape] = p.weight;
         }
 
         // if phoneme is not found, and it is the end of a sentence, reset all blendshapes
-        else if (phoneme == null || phoneme == "" || phoneme == " " || phoneme == "!" || phoneme == "?")
+        else
         {
-            if (blendshapeRoutine != null)
-                StopCoroutine(blendshapeRoutine);
-
-            StartCoroutine(BlendshapeRoutine(null));
+            currentLipsync = new Dictionary<string, float>();
         }
+    }
+
+    public void LipSync()
+    {
+        currentLipsync = new Dictionary<string, float>();
     }
 
     private LipsyncProfile.Phoneme GetPhoneme(string phoneme)
@@ -114,84 +116,59 @@ public class CharacterAnimator : MonoBehaviour
         return null;
     }
 
-    private IEnumerator BlendshapeRoutine(LipsyncProfile.Phoneme phoneme)
+    private IEnumerator BlendshapeRoutine()
     {
-        
-        float t = 0;
-        if(phoneme == null)
+        while (true)
         {
-            t = 1;
-        }
-
-        // apply viseme blendshapes
-        else
-        {
-            while (t < 1)
+            if (currentLipsync != null && currentLipsync.Count > 0)
             {
-                t += Time.deltaTime * blendshapeSpeed;                
+                foreach (var blend in currentLipsync.Keys)
+                    SetBlendshape(blend, currentLipsync[blend]);
 
-                SetBlendshape(phoneme.blendshape, phoneme.weight, t);
-                SetBlendshape(jawBlendshape, jawOpen, t);
-
-                yield return null;
+                SetBlendshape(jawBlendshape, jawOpen);
             }
-        }
-        
-
-        // reset all viseme blendshapes
-        while (t >= 0)
-        {
-            t -= Time.deltaTime * blendshapeSpeed;
-            
-            foreach (var renderer in renderers)
+            else
             {
-                for (int i = 0; i < renderer.sharedMesh.blendShapeCount; i++)
+                if (renderers != null && renderers.Length > 0)
                 {
-                    string shape = renderer.sharedMesh.GetBlendShapeName(i);
-                    if (shape != null && shape.StartsWith("v_"))
+                    foreach (var renderer in renderers)
                     {
-                        float current = renderer.GetBlendShapeWeight(i);
-                        renderer.SetBlendShapeWeight(i, Mathf.Lerp(current, 0, t));
-                    }
-                    else if(shape != null && shape == jawBlendshape)
-                    {
-                        float current = renderer.GetBlendShapeWeight(i);
-                        renderer.SetBlendShapeWeight(i, Mathf.Lerp(current, jawClosed, t));
+                        for (int i = 0; i < renderer.sharedMesh.blendShapeCount; i++)
+                        {
+                            string shape = renderer.sharedMesh.GetBlendShapeName(i);
+                            if(shape != null)
+                            {
+                                float current = renderer.GetBlendShapeWeight(i);
+                                if (shape.StartsWith("v_"))
+                                {
+                                    renderer.SetBlendShapeWeight(i, Mathf.Lerp(current, 0, Time.deltaTime * blendshapeSpeed));
+                                }
+                                else if (shape == jawBlendshape)
+                                {
+                                    renderer.SetBlendShapeWeight(i, Mathf.Lerp(current, jawClosed, Time.deltaTime * blendshapeSpeed));
+                                }
+                            }
+                        }
                     }
                 }
             }
             yield return null;
-        }
-
-        // Ensure all visemes are reset
-        foreach (var renderer in renderers)
-        {
-            for (int i = 0; i < renderer.sharedMesh.blendShapeCount; i++)
-            {
-                string shape = renderer.sharedMesh.GetBlendShapeName(i);
-                if (shape != null && shape.StartsWith("v_"))
-                {
-                    renderer.SetBlendShapeWeight(i, 0);
-                }
-                else if (shape != null && shape == jawBlendshape)
-                {
-                    float current = renderer.GetBlendShapeWeight(i);
-                    renderer.SetBlendShapeWeight(i, jawClosed);
-                }
-            }
-        }
+        }              
     }
 
-    void SetBlendshape(string name, float weight, float lerp = 1)
+    void SetBlendshape(string name, float weight)
     {
-        foreach (var renderer in renderers)
+        if(renderers != null && renderers.Length > 0)
         {
-            int index = renderer.sharedMesh.GetBlendShapeIndex(name);
-            if (index != -1)
+            foreach (var renderer in renderers)
             {
-                float current = renderer.GetBlendShapeWeight(index);
-                renderer.SetBlendShapeWeight(index, Mathf.Lerp(current, weight, lerp));
-            }                
+                int index = renderer.sharedMesh.GetBlendShapeIndex(name);
+                if (index != -1)
+                {
+                    float current = renderer.GetBlendShapeWeight(index);
+                    renderer.SetBlendShapeWeight(index, Mathf.Lerp(current, weight, Time.deltaTime * blendshapeSpeed));
+                }
+            }
         }
     }
 }
