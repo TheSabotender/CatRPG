@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe09b58af19a3f4eb043a6260c51c79, type: 3}
   m_Name: King
   m_EditorClassIdentifier: 
+  _guid: 874b3b5b-e127-474e-9967-453c2c82b90d
   displayName: King Bathan
   portrait_small: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   portrait_medium: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}

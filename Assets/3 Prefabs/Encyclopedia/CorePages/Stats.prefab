@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroName: {fileID: 8436796179893146842}
+  nameVariable: {fileID: 11400000, guid: 43228d439beb8ed46b8c0e503cf71c2e, type: 2}
 --- !u!1 &7567946536007922477
 GameObject:
   m_ObjectHideFlags: 0

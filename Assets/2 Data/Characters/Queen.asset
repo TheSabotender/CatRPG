@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe09b58af19a3f4eb043a6260c51c79, type: 3}
   m_Name: Queen
   m_EditorClassIdentifier: 
+  _guid: 82659b73-16b2-4507-84eb-48ebec45dc8d
   displayName: Queen
   portrait_small: {fileID: 0}
   portrait_medium: {fileID: 0}

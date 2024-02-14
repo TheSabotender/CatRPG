@@ -29,11 +29,11 @@ public class Loader : MonoBehaviour
         StartCoroutine(DoLoadPersistent());
     }
 
-    private void OnDestroy()
+    public static void LoadScene(string scene, Action<GameScene> onComplete)
     {
-        Variable.CleanVariables();
+        int index = SceneManager.GetSceneByName(scene).buildIndex;
+        instance.StartCoroutine(DoLoad(index, onComplete));
     }
-
 
     public static void LoadScene(int index, Action<GameScene> onComplete)
     {
@@ -102,6 +102,8 @@ public class Loader : MonoBehaviour
                 break;
             }
         }
+
+        //TODO Apply save stuff
 
         SceneManager.SetActiveScene(scene);
 

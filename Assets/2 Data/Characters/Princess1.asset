@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe09b58af19a3f4eb043a6260c51c79, type: 3}
   m_Name: Princess1
   m_EditorClassIdentifier: 
+  _guid: f7d55801-0250-4735-9e82-db7042224765
   displayName: Princess Nova
   portrait_small: {fileID: 0}
   portrait_medium: {fileID: 0}

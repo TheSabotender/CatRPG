@@ -8,7 +8,9 @@ using UnityEditor;
 
 public class GuidScriptableObject : ScriptableObject, IEquatable<GuidScriptableObject>
 {
-    protected string _guid;
+    [SerializeField]
+    [HideInInspector]
+    private string _guid;
 
     public string guid => _guid;
 
@@ -29,7 +31,6 @@ public class GuidScriptableObject : ScriptableObject, IEquatable<GuidScriptableO
 
     #region -------------------------- EDITOR ---------------------------
 #if UNITY_EDITOR
-    protected static Dictionary<string, GuidScriptableObject> _lookup = new Dictionary<string, GuidScriptableObject>();
 
     private void Awake()
     {
@@ -50,30 +51,38 @@ public class GuidScriptableObject : ScriptableObject, IEquatable<GuidScriptableO
             EditorSetNewGUID();
         }
 
-        if (_lookup.TryGetValue(_guid, out GuidScriptableObject reference))
+        var gso = GuidDatabase.Find<GuidScriptableObject>(guid);        
+        if (gso != null)
         {
-            if (reference != this)
+            if (gso != this)
             {
-                if (reference == null)
+                if (gso == null)
                 {
-                    _lookup[_guid] = this;
+                    Debug.Log("Replacing corrupt reference");
+                    GuidDatabase.Add(this);
                 }
                 else
                 {
                     EditorSetNewGUID();
-                    _lookup.Add(_guid, this);
+                    GuidDatabase.Add(this);                    
                 }
+                EditorUtility.SetDirty(GuidDatabase.Instance);
             }
         }
-        else _lookup.Add(_guid, this);
+        else
+        {
+            GuidDatabase.Add(this);
+            EditorUtility.SetDirty(GuidDatabase.Instance);
+        }
     }
 
     public void EditorSetNewGUID()
     {
-        if (_guid != null && _lookup.ContainsKey(_guid))
+        var gso = GuidDatabase.Find<GuidScriptableObject>(guid);
+        if (guid != null && gso != null)
         {
-            Debug.Log("Generating new GUID for object, NOTE: this will break references to this object! Old GUID: " + _guid, this);
-            _lookup.Remove(_guid);
+            Debug.Log("Generating new GUID for object, NOTE: this will break references to this object! Old GUID: " + guid, this);
+            GuidDatabase.Remove(this);
         }
 
         _guid = Guid.NewGuid().ToString();

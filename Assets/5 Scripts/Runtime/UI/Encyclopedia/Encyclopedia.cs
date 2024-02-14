@@ -206,7 +206,7 @@ public class Encyclopedia : MonoBehaviour
 
     public static void Hide()
     {
-        instance.GotoPage(instance.actualPages[0], () =>
+        instance.GotoPage(0, () =>
         {
             instance.animator.Play(instance.hide, () =>
             {

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe09b58af19a3f4eb043a6260c51c79, type: 3}
   m_Name: Princess2
   m_EditorClassIdentifier: 
+  _guid: baad7875-e546-4993-b659-f989a097dd6f
   displayName: Princess Jinx
   portrait_small: {fileID: 0}
   portrait_medium: {fileID: 0}

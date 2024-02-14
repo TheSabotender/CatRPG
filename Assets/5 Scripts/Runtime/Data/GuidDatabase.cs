@@ -60,4 +60,9 @@ public class GuidDatabase : ScriptableObject
     {
         return Instance.items.Where(i => i is T).Select(i => i as T).ToList();
     }
+
+    public static void Remove<T>(T guidScriptableObject) where T : GuidScriptableObject
+    {
+        Instance.items.Remove(guidScriptableObject);
+    }
 }

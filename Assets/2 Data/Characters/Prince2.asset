@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe09b58af19a3f4eb043a6260c51c79, type: 3}
   m_Name: Prince2
   m_EditorClassIdentifier: 
+  _guid: f51f4ec8-6214-45f7-9b6f-7845d301c526
   displayName: Prince
   portrait_small: {fileID: 0}
   portrait_medium: {fileID: 0}

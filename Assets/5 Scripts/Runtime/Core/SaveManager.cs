@@ -1,3 +1,4 @@
+using PlasticPipe.PlasticProtocol.Messages;
 using UnityEngine;
 
 public static class SaveManager
@@ -9,8 +10,20 @@ public static class SaveManager
     {
         _currentSaveGame = new PlayerData();
         _currentSaveGame.fileName = "";
-        _currentSaveGame.playerName = playerName;
         _currentSaveGame.reputations = new PlayerData.Reputation[0];
+        _currentSaveGame.location = new PlayerData.Location();
+
+        var variables = GuidDatabase.FindAll<Variable>();
+        _currentSaveGame.variables = new PlayerData.Variable[variables.Count];
+        for(int i =  0; i < variables.Count; i++)
+        {
+            _currentSaveGame.variables[i] = new PlayerData.Variable() {
+                guid = variables[i].guid,
+                stringValue = string.Empty,
+                boolValue = false,
+                intValue = 0
+            };
+        }
     }
 
     public static string[] GetSaveFiles()
@@ -41,20 +54,19 @@ public static class SaveManager
         return null;
     }
 
-    public static bool Load(string fileName)
+    public static void Load(PlayerData file)
     {
-        string path = Application.persistentDataPath + "/" + fileName + ".cat";
-        if (System.IO.File.Exists(path))
-        {
-            string json = System.IO.File.ReadAllText(path);
-            _currentSaveGame = JsonUtility.FromJson<PlayerData>(json);
-            return true;
-        }
+        _currentSaveGame = file;
 
-        Debug.LogError("Save file not found!");
-        return false;
+        CurrentSaveGame.OnPostLoad();
+
+        LocationData location = GuidDatabase.Find<LocationData>(CurrentSaveGame.location.scene);
+        Loader.LoadScene(location.scene.BuildIndex, (gs) =>
+        {
+
+        });
     }
-    
+
     public static bool Save()
     {
         if(CurrentSaveGame == null)
@@ -81,9 +93,14 @@ public static class SaveManager
             return;
         }
 
+        CurrentSaveGame.fileName = fileName;
+        CurrentSaveGame.OnPreSave();
+
         string json = JsonUtility.ToJson(CurrentSaveGame);
         System.IO.File.WriteAllText(Application.persistentDataPath + "/" + fileName + ".cat", json);
         PlayerPrefs.SetString("LastSaveFile", fileName);
+
+        MainMenu.Refresh();
     }
 
     public static void Unload()

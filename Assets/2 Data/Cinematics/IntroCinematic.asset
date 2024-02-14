@@ -20,7 +20,16 @@ MonoBehaviour:
   - rid: 854407427581018121
   - rid: 4379055792902111232
   - rid: 4379055852387041281
-  - rid: 4379055983055339528
+  - rid: 4379056062286266368
+  - rid: 4379056062286266369
+  - rid: 4379056062286266370
+  - rid: 4379056062286266371
+  - rid: 4379056062286266372
+  - rid: 4379056062286266373
+  - rid: 4379056062286266374
+  - rid: 4379056062286266375
+  - rid: 4379056062286266377
+  - rid: 4379056062286266378
   references:
     version: 2
     RefIds:
@@ -31,7 +40,7 @@ MonoBehaviour:
         guid: 79c51ebb-7135-428c-88b5-a8f62fc607e5
         position: {x: -399, y: 314}
         nextNode: 3404966a-f488-437a-84d8-13df8a827479
-        speakerGuid: 9bda8da6-e0fe-499d-9548-0ecca7be703f
+        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
         text: Who goes there?!
         nextIsOptions: 0
     - rid: 854407427581018120
@@ -41,7 +50,7 @@ MonoBehaviour:
         guid: 912f9af9-6b45-41a5-a217-2678ea12e44c
         position: {x: 67, y: 309}
         nextNode: cfe86760-ce1b-4785-86b1-81eb491e92cb
-        speakerGuid: 9bda8da6-e0fe-499d-9548-0ecca7be703f
+        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
         text: I'm here to see the king.
         nextIsOptions: 0
     - rid: 854407427581018121
@@ -50,8 +59,8 @@ MonoBehaviour:
         name: new Dialogue Node
         guid: eeb0f340-c1ff-4326-b5be-5b7d281f81fe
         position: {x: 520, y: 570}
-        nextNode: 
-        speakerGuid: 9bda8da6-e0fe-499d-9548-0ecca7be703f
+        nextNode: aafdb18e-4765-496c-a048-305b963146e3
+        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
         text: On what business?
         nextIsOptions: 0
     - rid: 4379055792902111232
@@ -80,13 +89,120 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         waidForEnd: 1
-    - rid: 4379055983055339528
-      type: {class: CinematicBranchNode, ns: , asm: GameRuntime}
+    - rid: 4379056062286266368
+      type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
       data:
-        name: new Branch Node
-        guid: b84d4196-cd6f-44d9-b8bf-f93dee6f5f27
-        position: {x: 368, y: 175}
+        name: new Dialogue Node
+        guid: aafdb18e-4765-496c-a048-305b963146e3
+        position: {x: 749, y: 583}
+        nextNode: c40deb9e-cdf6-4b85-b4ca-1b19b542da96
+        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
+        text: And what shall you be called then?
+        nextIsOptions: 1
+    - rid: 4379056062286266369
+      type: {class: CinematicDialogueOptionsNode, ns: , asm: GameRuntime}
+      data:
+        name: new DialogueOptions Node
+        guid: c40deb9e-cdf6-4b85-b4ca-1b19b542da96
+        position: {x: 972, y: 602}
+        nextNode: a3331f2c-20af-4ed0-9c6c-d832972236d2
+        options:
+        - text: Runt
+          node: f3633fe4-cc15-43d3-adcd-9801b7c20b6b
+        - text: Tiny
+          node: 7163e408-e29f-411a-a4ca-615a914eedec
+        - text: Squirt
+          node: a3331f2c-20af-4ed0-9c6c-d832972236d2
+        - text: up yours old man!
+          node: b1e095bc-7f9c-4bd8-a554-cd198eef87af
+        lastSpeaker: f5da0fb6-0fab-40e9-977e-571f6ed7738b
+        lastText: And what shall you be called then?
+    - rid: 4379056062286266370
+      type: {class: CinematicSetVariableNode, ns: , asm: GameRuntime}
+      data:
+        name: new SetVariable Node
+        guid: f3633fe4-cc15-43d3-adcd-9801b7c20b6b
+        position: {x: 1223, y: 321}
+        nextNode: ce2430d9-b6f7-40a3-9c4a-b2fc1b18a2f4
+        variableGuid: 8bf0a406-b0b1-4ac8-b61b-4c85a357a660
+        setType: 0
+        stringValue: Runt
+        boolValue: 0
+        intValue: 0
+    - rid: 4379056062286266371
+      type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
+      data:
+        name: new Dialogue Node
+        guid: ce2430d9-b6f7-40a3-9c4a-b2fc1b18a2f4
+        position: {x: 1474, y: 269}
         nextNode: 
-        branches:
-        - node: 
-        elseBranch: 
+        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
+        text: Runt eh?
+        nextIsOptions: 0
+    - rid: 4379056062286266372
+      type: {class: CinematicSetVariableNode, ns: , asm: GameRuntime}
+      data:
+        name: new SetVariable Node
+        guid: 7163e408-e29f-411a-a4ca-615a914eedec
+        position: {x: 1216, y: 503}
+        nextNode: 964ec7e3-420a-4b77-a935-5df41c923788
+        variableGuid: 8bf0a406-b0b1-4ac8-b61b-4c85a357a660
+        setType: 0
+        stringValue: Tiny
+        boolValue: 0
+        intValue: 0
+    - rid: 4379056062286266373
+      type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
+      data:
+        name: new Dialogue Node
+        guid: 964ec7e3-420a-4b77-a935-5df41c923788
+        position: {x: 1474, y: 482}
+        nextNode: 
+        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
+        text: Tiny eh?
+        nextIsOptions: 0
+    - rid: 4379056062286266374
+      type: {class: CinematicSetVariableNode, ns: , asm: GameRuntime}
+      data:
+        name: new SetVariable Node
+        guid: a3331f2c-20af-4ed0-9c6c-d832972236d2
+        position: {x: 1222, y: 657}
+        nextNode: 2747dc1f-6459-4942-9a51-3c85c7a9e611
+        variableGuid: 8bf0a406-b0b1-4ac8-b61b-4c85a357a660
+        setType: 0
+        stringValue: Squirt
+        boolValue: 0
+        intValue: 0
+    - rid: 4379056062286266375
+      type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
+      data:
+        name: new Dialogue Node
+        guid: 2747dc1f-6459-4942-9a51-3c85c7a9e611
+        position: {x: 1473, y: 695}
+        nextNode: 
+        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
+        text: Squirt eh?
+        nextIsOptions: 0
+    - rid: 4379056062286266377
+      type: {class: CinematicSetVariableNode, ns: , asm: GameRuntime}
+      data:
+        name: new SetVariable Node
+        guid: b1e095bc-7f9c-4bd8-a554-cd198eef87af
+        position: {x: 1214, y: 786}
+        nextNode: b04a1aa1-66c2-4898-be6a-e190153aa851
+        variableGuid: 8bf0a406-b0b1-4ac8-b61b-4c85a357a660
+        setType: 0
+        stringValue: Bastard
+        boolValue: 0
+        intValue: 0
+    - rid: 4379056062286266378
+      type: {class: CinematicDialogueNode, ns: , asm: GameRuntime}
+      data:
+        name: new Dialogue Node
+        guid: b04a1aa1-66c2-4898-be6a-e190153aa851
+        position: {x: 1467, y: 908}
+        nextNode: 
+        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
+        text: fine! if you insist on being rude, you shall be called what you are...
+          a bastard!
+        nextIsOptions: 0

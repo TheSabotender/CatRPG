@@ -70,6 +70,7 @@ public class CinematicDialogueNode : CinematicBaseNode
         }
 
         EditorGUILayout.LabelField("Text");
+        EditorStyles.textField.wordWrap = true;
         dialogueNode.text = EditorGUILayout.TextArea(dialogueNode.text, GUILayout.Height(100));
     }
     #endif

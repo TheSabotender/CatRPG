@@ -8,11 +8,14 @@ public class MainMenu : MonoBehaviour
     public SceneField introScene;
 
     public Button continueButton;
+    public Button saveButton;
+    public Button loadButton;
 
     public UIAnimator menuAnimator;
     public AnimationClip showMenuSlow;
     public AnimationClip showMenuQuick;
     public AnimationClip hideMenu;
+    public SaveMenu saveMenu;
 
     private GameScene gameScene;
 
@@ -30,6 +33,8 @@ public class MainMenu : MonoBehaviour
     private void Start()
     {
         continueButton.interactable = SaveManager.CurrentSaveGame != null || !string.IsNullOrEmpty(SaveManager.LastSaveFile());
+        saveButton.interactable = SaveManager.CurrentSaveGame != null;
+        loadButton.interactable = SaveManager.GetSaveFiles().Length > 0;
 
         Loader.LoadScene(introScene.BuildIndex, (gs) => gameScene = gs);
         menuAnimator.Play(showMenuSlow);
@@ -38,7 +43,7 @@ public class MainMenu : MonoBehaviour
 
     public static void Show()
     {
-        instance.continueButton.interactable = SaveManager.CurrentSaveGame != null || !string.IsNullOrEmpty(SaveManager.LastSaveFile());
+        Refresh();
         instance.menuAnimator.Play(instance.showMenuQuick);
         PauseManager.Pause(instance);
     }
@@ -46,8 +51,16 @@ public class MainMenu : MonoBehaviour
     public static void Hide()
     {
         PauseManager.Unpause(instance);
-        instance.continueButton.interactable = !string.IsNullOrEmpty(SaveManager.LastSaveFile());
+        Refresh();
+
         instance.menuAnimator.Play(instance.hideMenu);
+    }
+
+    public static void Refresh()
+    {
+        instance.continueButton.interactable = SaveManager.CurrentSaveGame != null || !string.IsNullOrEmpty(SaveManager.LastSaveFile());
+        instance.saveButton.interactable = SaveManager.CurrentSaveGame != null;
+        instance.loadButton.interactable = SaveManager.GetSaveFiles().Length > 0;
     }
 
     public void Btn_NewGame()
@@ -77,14 +90,14 @@ public class MainMenu : MonoBehaviour
         //TODO clear cutscenes and other persistent data
 
         var save = SaveManager.GetSaveInfo(SaveManager.LastSaveFile());
-        SaveManager.Load(SaveManager.LastSaveFile());
+        SaveManager.Load(SaveManager.GetSaveInfo(SaveManager.LastSaveFile()));
         PauseManager.Unpause(instance);
 
         menuAnimator.Play(hideMenu, () =>
         {
             gameScene.GetComponent<CinematicPlayer>().Play(() =>
             {
-                LocationData location = GuidDatabase.Find<LocationData>(save.playerLocation);
+                LocationData location = GuidDatabase.Find<LocationData>(save.location.scene);
                 Loader.LoadScene(location.scene.BuildIndex, null);
             });
         });
@@ -92,12 +105,12 @@ public class MainMenu : MonoBehaviour
 
     public void Btn_Load()
     {
-        //TODO clear cutscenes and other persistent data
+        saveMenu.Show(false);
     }
 
     public void Btn_Save()
     {
-
+        saveMenu.Show(true);
     }
 
     public void Btn_Encyclo()

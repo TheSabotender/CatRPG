@@ -139,13 +139,13 @@ TextureImporter:
       name: dialogue_0
       rect:
         serializedVersion: 2
-        x: 106
-        y: 139
-        width: 292
+        x: 119
+        y: 421
+        width: 279
         height: 85
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 136, y: 36, z: 141, w: 44}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 135, y: 36, z: 135, w: 44}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -157,15 +157,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dialogue_1
+      name: dialogue_tabup
       rect:
         serializedVersion: 2
-        x: 26
-        y: 140
+        x: 123
+        y: 301
         width: 67
         height: 36
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 26, y: 7, z: 28, w: 23}
       outline: []
       physicsShape: []
@@ -178,16 +178,16 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dialogue_2
+      name: dialogue_btn_disabled
       rect:
         serializedVersion: 2
         x: 5
-        y: 17
-        width: 932
-        height: 116
+        y: 435
+        width: 111
+        height: 60
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 48, y: 34, z: 48, w: 25}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -199,16 +199,16 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dialogue_3
+      name: dialogue_btn_highlight
       rect:
         serializedVersion: 2
-        x: 485
-        y: 138
-        width: 444
-        height: 36
+        x: 5
+        y: 303
+        width: 111
+        height: 60
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 48, y: 34, z: 48, w: 25}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -220,22 +220,64 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dialogue_4
+      name: dialogue_btn
       rect:
         serializedVersion: 2
-        x: 415
-        y: 140
-        width: 64
-        height: 68
+        x: 5
+        y: 369
+        width: 111
+        height: 60
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 48, y: 34, z: 48, w: 25}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: e1f665457173774409786736546c28be
       internalID: -1643632084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dialogue_tabdown
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 301
+        width: 67
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 26, y: 23, z: 26, w: 7}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3acc61e076f3fdc4f9b97b5c79a888b9
+      internalID: -1529955676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dialogue_1
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 342
+        width: 279
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 135, y: 36, z: 135, w: 33}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8304bd513ff7234aa324fe22be2e488
+      internalID: 748901941
       vertices: []
       indices: 
       edges: []
@@ -252,10 +294,12 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       dialogue_0: -1000401512
-      dialogue_1: -576800145
-      dialogue_2: 1786884399
-      dialogue_3: -1594443027
-      dialogue_4: -1643632084
+      dialogue_1: 748901941
+      dialogue_btn: -1643632084
+      dialogue_btn_disabled: 1786884399
+      dialogue_btn_highlight: -1594443027
+      dialogue_tabdown: -1529955676
+      dialogue_tabup: -576800145
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

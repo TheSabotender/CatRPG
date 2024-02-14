@@ -49,7 +49,7 @@ public class SaveEditorWindow : EditorWindow
                             GUILayout.FlexibleSpace();
                             if (GUILayout.Button("Load", GUILayout.Width(40)))
                             {
-                                SaveManager.Load(file);
+                                SaveManager.Load(SaveManager.GetSaveInfo(file));
                             }
                             if (GUILayout.Button("X", GUILayout.Width(20)))
                             {
@@ -79,12 +79,11 @@ public class SaveEditorWindow : EditorWindow
             using (new EditorGUILayout.VerticalScope("box"))
             {                
                 SaveManager.CurrentSaveGame.fileName = EditorGUILayout.TextField("File Name", SaveManager.CurrentSaveGame.fileName);
-                SaveManager.CurrentSaveGame.playerName = EditorGUILayout.TextField("Player Name", SaveManager.CurrentSaveGame.playerName);
                 SaveManager.CurrentSaveGame.playerLevel = EditorGUILayout.IntField("Player Level", SaveManager.CurrentSaveGame.playerLevel);
                 SaveManager.CurrentSaveGame.playerExp = EditorGUILayout.IntField("Player Exp", SaveManager.CurrentSaveGame.playerExp);
-                SaveManager.CurrentSaveGame.playerLocation = EditorGUILayout.TextField("Player Location", SaveManager.CurrentSaveGame.playerLocation);
-                SaveManager.CurrentSaveGame.playerPosition = EditorGUILayout.Vector3Field("Player Position", SaveManager.CurrentSaveGame.playerPosition);
-                SaveManager.CurrentSaveGame.playerRotation = EditorGUILayout.FloatField("Player Rotation", SaveManager.CurrentSaveGame.playerRotation);
+                SaveManager.CurrentSaveGame.location.scene = EditorGUILayout.TextField("Player Location", SaveManager.CurrentSaveGame.location.scene);
+                SaveManager.CurrentSaveGame.location.position = EditorGUILayout.Vector3Field("Player Position", SaveManager.CurrentSaveGame.location.position);
+                SaveManager.CurrentSaveGame.location.rotation = EditorGUILayout.FloatField("Player Rotation", SaveManager.CurrentSaveGame.location.rotation);
                 SaveManager.CurrentSaveGame.currentQuest = EditorGUILayout.TextField("Current Quest", SaveManager.CurrentSaveGame.currentQuest);
                 EditorGUILayout.LabelField("Reputations");
                 using (new EditorGUILayout.VerticalScope("box"))

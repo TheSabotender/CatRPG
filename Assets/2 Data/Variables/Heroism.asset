@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 031c9b7253778b34ba60ba318c3ee8cf, type: 3}
   m_Name: Heroism
   m_EditorClassIdentifier: 
+  _guid: ee922ffd-aacd-4b11-b633-d0eff19cbf9b
   type: 2
-  stringValue: 
-  boolValue: 0
-  intValue: 0
