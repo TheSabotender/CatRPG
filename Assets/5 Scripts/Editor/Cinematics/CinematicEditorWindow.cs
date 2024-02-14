@@ -267,6 +267,7 @@ public class CinematicEditorWindow : EditorWindow
         genericMenu.AddItem(new GUIContent("Branch"), false, () => { OnClickAddNode<CinematicBranchNode>(position); });
         genericMenu.AddItem(new GUIContent("Camera"), false, () => { OnClickAddNode<CinematicMoveCameraNode>(position); });
         genericMenu.AddItem(new GUIContent("SetVar"), false, () => { OnClickAddNode<CinematicSetVariableNode>(position); });
+        genericMenu.AddItem(new GUIContent("Goto Location"), false, () => { OnClickAddNode<CinematicLoadSceneNode>(position); });
 
         genericMenu.ShowAsContext();
     }

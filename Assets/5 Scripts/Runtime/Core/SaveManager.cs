@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class SaveManager
 {
-    public static PlayerData _currentSaveGame;
+    private static PlayerData _currentSaveGame;
     public static PlayerData CurrentSaveGame => _currentSaveGame;
 
     public static void NewGame(string playerName)
@@ -56,10 +56,14 @@ public static class SaveManager
 
     public static void Load(PlayerData file)
     {
-        _currentSaveGame = file;
+        //Make sure to hide all overlays
+        MainMenu.Hide();
 
+        //Apply the save game
+        _currentSaveGame = file;
         CurrentSaveGame.OnPostLoad();
 
+        //Load the scene
         LocationData location = GuidDatabase.Find<LocationData>(CurrentSaveGame.location.scene);
         Loader.LoadScene(location.scene.BuildIndex, (gs) =>
         {

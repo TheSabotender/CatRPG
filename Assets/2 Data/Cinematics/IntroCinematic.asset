@@ -30,6 +30,7 @@ MonoBehaviour:
   - rid: 4379056062286266375
   - rid: 4379056062286266377
   - rid: 4379056062286266378
+  - rid: 4379056062286266379
   references:
     version: 2
     RefIds:
@@ -40,7 +41,7 @@ MonoBehaviour:
         guid: 79c51ebb-7135-428c-88b5-a8f62fc607e5
         position: {x: -399, y: 314}
         nextNode: 3404966a-f488-437a-84d8-13df8a827479
-        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
+        speakerGuid: ff58e6cc-1336-4a8b-8953-87ec4f9a6590
         text: Who goes there?!
         nextIsOptions: 0
     - rid: 854407427581018120
@@ -50,7 +51,7 @@ MonoBehaviour:
         guid: 912f9af9-6b45-41a5-a217-2678ea12e44c
         position: {x: 67, y: 309}
         nextNode: cfe86760-ce1b-4785-86b1-81eb491e92cb
-        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
+        speakerGuid: ac55c429-0147-4439-8c5c-251ce275671b
         text: I'm here to see the king.
         nextIsOptions: 0
     - rid: 854407427581018121
@@ -60,7 +61,7 @@ MonoBehaviour:
         guid: eeb0f340-c1ff-4326-b5be-5b7d281f81fe
         position: {x: 520, y: 570}
         nextNode: aafdb18e-4765-496c-a048-305b963146e3
-        speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
+        speakerGuid: ff58e6cc-1336-4a8b-8953-87ec4f9a6590
         text: On what business?
         nextIsOptions: 0
     - rid: 4379055792902111232
@@ -135,7 +136,7 @@ MonoBehaviour:
         name: new Dialogue Node
         guid: ce2430d9-b6f7-40a3-9c4a-b2fc1b18a2f4
         position: {x: 1474, y: 269}
-        nextNode: 
+        nextNode: 75efb896-5561-42b3-948a-b7dee36ccc11
         speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
         text: Runt eh?
         nextIsOptions: 0
@@ -157,7 +158,7 @@ MonoBehaviour:
         name: new Dialogue Node
         guid: 964ec7e3-420a-4b77-a935-5df41c923788
         position: {x: 1474, y: 482}
-        nextNode: 
+        nextNode: 75efb896-5561-42b3-948a-b7dee36ccc11
         speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
         text: Tiny eh?
         nextIsOptions: 0
@@ -179,7 +180,7 @@ MonoBehaviour:
         name: new Dialogue Node
         guid: 2747dc1f-6459-4942-9a51-3c85c7a9e611
         position: {x: 1473, y: 695}
-        nextNode: 
+        nextNode: 75efb896-5561-42b3-948a-b7dee36ccc11
         speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
         text: Squirt eh?
         nextIsOptions: 0
@@ -200,9 +201,17 @@ MonoBehaviour:
       data:
         name: new Dialogue Node
         guid: b04a1aa1-66c2-4898-be6a-e190153aa851
-        position: {x: 1467, y: 908}
-        nextNode: 
+        position: {x: 1471, y: 921}
+        nextNode: 75efb896-5561-42b3-948a-b7dee36ccc11
         speakerGuid: 874b3b5b-e127-474e-9967-453c2c82b90d
         text: fine! if you insist on being rude, you shall be called what you are...
           a bastard!
         nextIsOptions: 0
+    - rid: 4379056062286266379
+      type: {class: CinematicLoadSceneNode, ns: , asm: GameRuntime}
+      data:
+        name: new LoadScene Node
+        guid: 75efb896-5561-42b3-948a-b7dee36ccc11
+        position: {x: 1765, y: 594}
+        nextNode: 
+        locationGuid: bc032df2-3cd1-411b-86ca-6ba1f4dd2e50

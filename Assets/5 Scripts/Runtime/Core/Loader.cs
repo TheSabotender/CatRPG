@@ -40,6 +40,22 @@ public class Loader : MonoBehaviour
         instance.StartCoroutine(DoLoad(index, onComplete));
     }
 
+    public static void LoadScene(LocationData location, Action<GameScene> onComplete)
+    {
+        if (SaveManager.CurrentSaveGame != null)
+        {
+            //TODO get position and rotation from TransitionZone
+            SaveManager.CurrentSaveGame.location = new PlayerData.Location()
+            {
+                scene = location.guid,
+                position = new Vector3(),
+                rotation = 0
+            };
+        }
+
+        instance.StartCoroutine(DoLoad(location.scene.BuildIndex, onComplete));
+    }
+
     IEnumerator DoLoadPersistent()
     {
         for (int i = 0; i < persistentScenes.Length; i++)

@@ -45,6 +45,8 @@ public class CinematicPlayer : MonoBehaviour
         while (currentNode != null)
         {
             Debug.Log("Running node: " + currentNode.name);
+            if (currentNode is CinematicLoadSceneNode)
+                IsInBlockingCutscene = false;
             yield return currentNode.Run();
 
             CinematicBaseNode nextNode = null;
